@@ -1,0 +1,26 @@
+{
+    "version": 2,
+    "plugins": {
+        "TSLint": {
+            "enabled": true
+        },
+        "eslint": {
+            "enabled": false
+        }
+    },
+    "checks": {
+        "file-lines": {
+            "enabled": true,
+            "config": {
+                "threshold": 400
+            }
+        },
+        "method-lines": {
+            "enabled": true,
+            "config": {
+                "threshold": 35
+            }
+        }
+    },
+    "exclude_patterns": ["dist/"]
+}
