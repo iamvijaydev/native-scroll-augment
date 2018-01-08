@@ -27,28 +27,27 @@ const forEg2 = () => {
     yList.appendChild(child)
   }
 
-  let count = 0
-
-  for (let i = 0; i < xCount; i++) {
+  for (let i = 0; i < yCount; i++) {
     let gridRow = document.createElement('div')
     let gridItem
+    let headItem
 
     gridRow.classList.add('grid-row')
 
-    let v = document.createElement('div')
-    v.classList.add('each-item')
-    xHeading.appendChild(v)
-    
-    for (let j = 0; j < yCount; j++) {
+    for (let j = 0; j < xCount; j ++) {
       gridItem = document.createElement('div')
       gridItem.classList.add('each-item')
       gridRow.appendChild(gridItem)
+
+      if (i === 0) {
+        gridItem = document.createElement('div')
+        gridItem.classList.add('each-item')
+        xHeading.appendChild(gridItem)
+      }
     }
 
     xGrid.appendChild(gridRow)
   }
-
-  console.log(count)
 
   return {
     yList,

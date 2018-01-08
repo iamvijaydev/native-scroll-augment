@@ -13,9 +13,12 @@ export const styles = `
     overflow-y: auto;
     position: absolute;
     left: 0;
-    top: 50px;
+    top: 61px;
     bottom: 0;
     width: 200px;
+    z-index: 4;
+    background-color: #fff;
+    box-shadow: 2px 0 3px #d2d2d2;
   }
 
   .sidebar ul {
@@ -51,7 +54,8 @@ export const styles = `
     padding: 20px 0;
     height: 25px;
     position: relative;
-    width: 150px;
+    width: 100px;
+    flex-basis: 100px;
     border-bottom: 1px solid #eaeaea;
     border-right: 1px solid #eaeaea;
   }
@@ -75,14 +79,21 @@ export const styles = `
     left: 0;
     top: 0;
     right: 0;
-    height: 50px;
+    height: 62px;
+    background-color: #fff;
+    z-index: 3;
+    box-shadow: 0 2px 3px #d2d2d2;
   }
   .head-wrap {
-    width: 2000px;
+    width: 3000px;
     display: flex;
   }
   .head-wrap .each-item {
-    padding: 0;
+    padding: 10px 0;
+    border-bottom: none;
+  }
+  .head-wrap .each-item:after {
+    top: 10px;
   }
 
   .grid {
@@ -93,8 +104,11 @@ export const styles = `
     right: 0;
     bottom: 0;
   }
-  .grid-wrap {
-    width: 2000px;
+  .grid-wrap,
+  .grid-row {
+    width: 3000px;
+  }
+  .grid-row {
     display: flex;
   }
 `
