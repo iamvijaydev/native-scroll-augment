@@ -1,6 +1,6 @@
 {
   "name": "native-scroll-augment",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Augmented features for native scroll",
   "main": "build/index.js",
   "module": "src/index.ts",
