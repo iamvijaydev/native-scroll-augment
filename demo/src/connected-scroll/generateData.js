@@ -11,8 +11,8 @@ const forEg1 = () => {
 }
 
 const forEg2 = () => {
-  const yCount = 75;
-  const xCount = 100;
+  const yCount = 20;
+  const xCount = 30;
 
   const yList = document.createElement('ul')
   const xHeading = document.createElement('div')
@@ -27,24 +27,28 @@ const forEg2 = () => {
     yList.appendChild(child)
   }
 
-  for (let i = 0; i < xCount; i++) {
-    let headRow = document.createElement('div')
-    let gridRow = document.createElement('div')
-    let child
+  let count = 0
 
-    headRow.classList.add('head-item')
+  for (let i = 0; i < xCount; i++) {
+    let gridRow = document.createElement('div')
+    let gridItem
+
     gridRow.classList.add('grid-row')
 
-    xHeading.appendChild(headRow)
+    let v = document.createElement('div')
+    v.classList.add('each-item')
+    xHeading.appendChild(v)
     
     for (let j = 0; j < yCount; j++) {
-      child = document.createElement('div')
-      child.classList.add('grid-item')
-      gridRow.appendChild(child)
+      gridItem = document.createElement('div')
+      gridItem.classList.add('each-item')
+      gridRow.appendChild(gridItem)
     }
 
     xGrid.appendChild(gridRow)
   }
+
+  console.log(count)
 
   return {
     yList,

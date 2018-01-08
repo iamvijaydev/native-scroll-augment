@@ -41,9 +41,9 @@ export const startConnectScrollEg2 = ($parent) => {
   } = generateData.forEg2()
 
   $parent.classList.add('parent')
-  $scrollArea1.classList.add('area')
-  $scrollArea2.classList.add('area')
-  $scrollArea3.classList.add('area')
+  $scrollArea1.classList.add('sidebar')
+  $scrollArea2.classList.add('header')
+  $scrollArea3.classList.add('grid')
   injectStyles(commonStyles)
   injectStyles(eg2Styles)
 
@@ -54,7 +54,7 @@ export const startConnectScrollEg2 = ($parent) => {
   const nsa = new NativeScrollAugment({
     parent: $parent,
     scrollsAreas: [$scrollArea1, $scrollArea2, $scrollArea3],
-    options: { enableKinetics: true, movingAverage: 0.2 }
+    options: { enableKinetics: true, movingAverage: 0.1 }
   })
 
   nsa.init();

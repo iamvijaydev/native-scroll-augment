@@ -1,8 +1,5 @@
 export const styles = `
   .parent {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     margin: 70px 50px;
     border: 1px solid #dadada;
     background-color: #fff;
@@ -11,13 +8,17 @@ export const styles = `
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   }
 
-  .area {
-    flex-grow: 1;
+  .sidebar {
     overflow-x: hidden;
     overflow-y: auto;
+    position: absolute;
+    left: 0;
+    top: 50px;
+    bottom: 0;
+    width: 200px;
   }
 
-  .area ul {
+  .sidebar ul {
     display: inline-block;
     margin: 0;
     padding: 0;
@@ -25,34 +26,75 @@ export const styles = `
     list-style: none;
   }
 
-  .area li {
-    padding: 30px 0;
-    height: 30px;
+  .sidebar li {
+    padding: 20px 0;
+    height: 25px;
     position: relative;
   }
 
-  .area li:not(:last-child) {
-    border-bottom: 1px solid rgba(0,0,0,.1);
+  .sidebar li:not(:last-child) {
+    border-bottom: 1px solid #eaeaea;
   }
 
-  .area li:before,
-  .area li:after {
+  .sidebar li:after {
     content: ' ';
     position: absolute;
-    top: 33px;
+    top: 20px;
     height: 25px;
-    background: rgba(0,0,0,.1)
-  }
-
-  .area li:before {
-    left: 25px;
-    width: 25px;
-    border-radius: 50%;
-  }
-
-  .area li:after {
-    left: 75px;
-    right: 25px;
+    background: #eaeaea;
+    left: 20px;
+    right: 20px;
     border-radius: 10px;
+  }
+
+  .each-item {
+    padding: 20px 0;
+    height: 25px;
+    position: relative;
+    width: 150px;
+    border-bottom: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
+  }
+
+  .each-item:after {
+    content: ' ';
+    position: absolute;
+    top: 20px;
+    height: 25px;
+    background: #eaeaea;
+    left: 20px;
+    right: 20px;
+    border-radius: 10px;
+  }
+
+  .header {
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: absolute;
+    border-left: 200px solid #ccc;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 50px;
+  }
+  .head-wrap {
+    width: 2000px;
+    display: flex;
+  }
+  .head-wrap .each-item {
+    padding: 0;
+  }
+
+  .grid {
+    overflow: auto;
+    position: absolute;
+    left: 200px;
+    top: 50px;
+    right: 0;
+    bottom: 0;
+  }
+  .grid-wrap {
+    width: 2000px;
+    display: flex;
   }
 `
