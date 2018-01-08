@@ -1,44 +1,43 @@
 {
-    "name": "native-scroll-augment",
-    "version": "0.0.1",
-    "description": "Augmented features for native scroll",
-    "main": "build/index.js",
-    "module": "src/index.ts",
-    "types": "./lib/main.d.ts",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/iamvijaydev/native-scroll-augment.git"
-    },
-    "author": "Vijay Dev <vijaydev.in@gmail.com> (http://vijaydev.com/)",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/iamvijaydev/native-scroll-augment/issues"
-    },
-    "homepage": "https://github.com/iamvijaydev/native-scroll-augment#readme",
-    "keywords": [
-        "native scroll",
-        "augment scroll",
-        "scroll features",
-        "scroll to",
-        "scroll by",
-        "kinetic scroll"
-    ],
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "tsc -w",
-        "build": "tsc"
-    },
-    "peerDependencies": {
-        "lodash": "^4.17.4"
-    },
-    "dependencies": {
-        "lodash": "^4.17.4"
-    },
-    "devDependencies": {
-        "@types/lodash": "^4.14.92",
-        "awesome-typescript-loader": "^3.4.1",
-        "source-map-loader": "^0.2.3",
-        "tslint": "^5.8.0",
-        "typescript": "^2.6.2"
-    }
+  "name": "native-scroll-augment",
+  "version": "0.0.1",
+  "description": "Augmented features for native scroll",
+  "main": "build/index.js",
+  "module": "src/index.ts",
+  "types": "./lib/main.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iamvijaydev/native-scroll-augment.git"
+  },
+  "author": "Vijay Dev <vijaydev.in@gmail.com> (http://vijaydev.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iamvijaydev/native-scroll-augment/issues"
+  },
+  "homepage": "https://github.com/iamvijaydev/native-scroll-augment#readme",
+  "keywords": [
+    "native scroll",
+    "augment scroll",
+    "scroll features",
+    "scroll to",
+    "scroll by",
+    "kinetic scroll"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc -w",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.92",
+    "awesome-typescript-loader": "^3.4.1",
+    "source-map-loader": "^0.2.3",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.10.0"
+  }
 }
