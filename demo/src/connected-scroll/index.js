@@ -34,6 +34,11 @@ export const startConnectScrollEg2 = ($parent) => {
   const $scrollArea1 = document.querySelector('#scroll-area-1')
   const $scrollArea2 = document.querySelector('#scroll-area-2')
   const $scrollArea3 = document.querySelector('#scroll-area-3')
+  const {
+    yList,
+    xHeading,
+    xGrid
+  } = generateData.forEg2()
 
   $parent.classList.add('parent')
   $scrollArea1.classList.add('area')
@@ -42,8 +47,9 @@ export const startConnectScrollEg2 = ($parent) => {
   injectStyles(commonStyles)
   injectStyles(eg2Styles)
 
-  $scrollArea1.appendChild(generateData.forEg1());
-  $scrollArea2.appendChild(generateData.forEg1());
+  $scrollArea1.appendChild(yList);
+  $scrollArea2.appendChild(xHeading);
+  $scrollArea3.appendChild(xGrid);
 
   const nsa = new NativeScrollAugment({
     parent: $parent,
