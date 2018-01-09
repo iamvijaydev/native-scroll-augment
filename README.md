@@ -32,3 +32,8 @@ const nsa = new NativeScrollAugment($parent, [$scrollArea], options);
 // initialize the instance
 nsa.init()
 ```
+
+## TODO
+* Implement update options
+* Implement replace scroll areas
+* Tests and coverage

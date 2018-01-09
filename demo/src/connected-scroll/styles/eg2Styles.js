@@ -1,13 +1,4 @@
 export const styles = `
-  .parent {
-    margin: 70px 50px;
-    border: 1px solid #dadada;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  }
-
   .sidebar {
     overflow-x: hidden;
     overflow-y: auto;
@@ -59,7 +50,6 @@ export const styles = `
     border-bottom: 1px solid #eaeaea;
     border-right: 1px solid #eaeaea;
   }
-
   .each-item:after {
     content: ' ';
     position: absolute;
@@ -70,12 +60,18 @@ export const styles = `
     right: 20px;
     border-radius: 10px;
   }
+  .each-item.active {
+    background: #eaeaea;
+  }
+  .each-item.active:after {
+    background: #ccc;
+  }
 
   .header {
     overflow-x: auto;
     overflow-y: hidden;
     position: absolute;
-    border-left: 200px solid #ccc;
+    border-left: 200px solid #ffd290;
     left: 0;
     top: 0;
     right: 0;
