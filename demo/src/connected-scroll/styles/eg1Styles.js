@@ -20,33 +20,33 @@ export const styles = `
   }
 
   .area li {
-    padding: 30px 0;
-    height: 30px;
+    padding: 3rem 0;
+    height: 3rem;
     position: relative;
   }
 
   .area li:not(:last-child) {
-    border-bottom: 1px solid rgba(0,0,0,.1);
+    border-bottom: 1px solid #eaeaea;
   }
 
   .area li:before,
   .area li:after {
     content: ' ';
     position: absolute;
-    top: 33px;
-    height: 25px;
-    background: rgba(0,0,0,.1)
+    top: 3.3rem;
+    height: 2.5rem;
+    background: #eaeaea
   }
 
   .area li:before {
-    left: 25px;
-    width: 25px;
+    left: 2.5rem;
+    width: 2.5rem;
     border-radius: 50%;
   }
 
   .area li:after {
     left: 75px;
-    right: 25px;
-    border-radius: 10px;
+    right: 2.5rem;
+    border-radius: 1rem;
   }
 `

@@ -71,7 +71,7 @@ export const styles = `
     overflow-x: auto;
     overflow-y: hidden;
     position: absolute;
-    border-left: 200px solid #ffd290;
+    border-left: 200px solid #d6bf19;
     left: 0;
     top: 0;
     right: 0;

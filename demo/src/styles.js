@@ -1,4 +1,8 @@
 export const styles = `
+  html {
+    font-size: 62.5%;
+  }
+
   body {
     padding: 0;
     margin: 0;
@@ -13,10 +17,10 @@ export const styles = `
     right: 0;
     top: 0;
     bottom: 0;
-    margin: 70px;
+    margin: 7rem;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.34);
+    box-shadow: 0 .5rem 2rem rgba(0, 0, 0, 0.34);
   }
 `

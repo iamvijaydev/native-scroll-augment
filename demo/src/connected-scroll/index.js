@@ -2,10 +2,12 @@ import NativeScrollAugment from '../../../dist'
 
 import generateData from './generateData'
 import {
-  commonStyles,
   eg1Styles,
   eg2Styles
 } from './styles'
+import {
+  styles as commonStyles
+} from '../styles'
 import { injectStyles } from '../utils'
 
 export const startConnectScrollEg1 = ($parent) => {
