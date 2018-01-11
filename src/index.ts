@@ -166,7 +166,7 @@ export default class NativeScrollAugment {
 
     this._tap = this._tap.bind(this);
     this._swipe = this._swipe.bind(this);
-    this.release = this.release.bind(this);
+    this._release = this._release.bind(this);
 
     this.settings = extend(
       {},
@@ -182,7 +182,7 @@ export default class NativeScrollAugment {
     if (!this.hasTouch && this.settings.enableKinetics) {
       this.$parent.removeEventListener('mousedown', this._tap);
       this.$parent.removeEventListener('mousemove', this._swipe);
-      this.$parent.removeEventListener('mouseup', this.release);
+      this.$parent.removeEventListener('mouseup', this._release);
     }
   }
 
@@ -408,7 +408,7 @@ export default class NativeScrollAugment {
     this._cancelAutoScroll();
 
     this.$parent.addEventListener('mousemove', this._swipe, true);
-    this.$parent.addEventListener('mouseup', this.release, true);
+    this.$parent.addEventListener('mouseup', this._release, true);
 
     if (preventDefaultException((e.target as HTMLElement), this.settings.preventDefaultException)) {
       e.preventDefault();
@@ -457,7 +457,7 @@ export default class NativeScrollAugment {
     }
   }
 
-  public release() {
+  public _release() {
     let targetLeft = this.targetLeft;
     let targetTop = this.targetTop;
     let amplitudeLeft = this.amplitudeLeft;
@@ -484,6 +484,6 @@ export default class NativeScrollAugment {
     this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
 
     this.$parent.removeEventListener('mousemove', this._swipe);
-    this.$parent.removeEventListener('mouseup', this.release);
+    this.$parent.removeEventListener('mouseup', this._release);
   }
 }
