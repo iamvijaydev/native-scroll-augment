@@ -1,15 +1,17 @@
 import {
-    isElement,
-    isArray,
-    isString,
-    extend,
+  isElement,
+  isArray,
+  isString,
+  extend,
+  find,
+  isNumber
 } from 'lodash';
 import {
-    findMatchingTarget,
-    getTime,
-    getPoint,
-    preventDefaultException,
-    getMaxScroll,
+  findMatchingTarget,
+  getTime,
+  getPoint,
+  preventDefaultException,
+  getMaxScroll,
 } from './utils.js';
 import {
   defaultOptions,
@@ -18,15 +20,6 @@ import {
 } from './defaultOptions';
 
 export default class NativeScrollAugment {
-  public scrollToStart = this.scrollGen(true, true, true);
-  public scrollToStartLeft = this.scrollGen(true, true, false);
-  public scrollToStartTop = this.scrollGen(true, false, true);
-  public scrollToEnd = this.scrollGen(false, true, true);
-  public scrollToEndLeft = this.scrollGen(false, true, false);
-  public scrollToEndTop = this.scrollGen(false, false, true);
-  public scrollToPosition = this.scrollToBy(false);
-  public scrollByValue = this.scrollToBy(true);
-
   private hasTouch: boolean;
   private DETECT_EVT: string;
   private activeId: string;
@@ -97,14 +90,6 @@ export default class NativeScrollAugment {
     this.pressed = false;
     this.isAutoScrolling = false;
 
-    this.setActiveNode = this.setActiveNode.bind(this);
-    this.onScroll = this.onScroll.bind(this);
-    this.autoScroll = this.autoScroll.bind(this);
-
-    this.tap = this.tap.bind(this);
-    this.swipe = this.swipe.bind(this);
-    this.release = this.release.bind(this);
-
     this.settings = extend(
       {},
       defaultOptions,
@@ -113,37 +98,77 @@ export default class NativeScrollAugment {
   }
 
   public destroy() {
-    this.$parent.addEventListener(this.DETECT_EVT, this.setActiveNode, true);
-    this.$parent.addEventListener('scroll', this.onScroll, true);
+    this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
+    this.$parent.addEventListener('scroll', this._onScroll, true);
 
     if (!this.hasTouch && this.settings.enableKinetics) {
-      this.$parent.removeEventListener('mousedown', this.tap);
-      this.$parent.removeEventListener('mousemove', this.swipe);
-      this.$parent.removeEventListener('mouseup', this.release);
+      this.$parent.removeEventListener('mousedown', this._tap);
+      this.$parent.removeEventListener('mousemove', this._swipe);
+      this.$parent.removeEventListener('mouseup', this._release);
     }
   }
 
   public init() {
-    this.$parent.addEventListener(this.DETECT_EVT, this.setActiveNode, true);
-    this.$parent.addEventListener('scroll', this.onScroll, true);
+    this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode.bind(this), true);
+    this.$parent.addEventListener('scroll', this._onScroll.bind(this), true);
 
     if (!this.hasTouch && this.settings.enableKinetics) {
-      this.$parent.addEventListener('mousedown', this.tap, true);
+      this.$parent.addEventListener('mousedown', this._tap.bind(this), true);
     }
   }
 
-  private setActiveNode(e: Event) {
+  public updateOptions(options: ISettingsOptional) {
+    this.settings = extend(
+      {},
+      defaultOptions,
+      options,
+    );
+  }
+
+  public replaceScrollAreas(scrollsAreas: HTMLElement[], left?: number, top?: number) {
+    let ok = true;
+    let notElement: {
+      $node: HTMLElement;
+      index: number;
+    } | undefined;
+
+    if (!isArray(scrollsAreas)) {
+      console.error(`Argument should be an array. Provided ${typeof scrollsAreas}`);
+      ok = false;
+    } else {
+      scrollsAreas.forEach(($node, index) => {
+        if (!isElement($node)) {
+          console.error(`Entries in argument should be an element.
+            Provided ${typeof $node} at index ${index}`);
+          ok = false;
+        }
+      });
+    }
+
+    if (ok) {
+      this._cancelAutoScroll();
+
+      this.scrollLeft = isNumber(left) ? left : 0;
+      this.scrollTop = isNumber(top) ? top : 0;
+
+      this._resetMomentum();
+
+      this.scrollsAreas = scrollsAreas;
+    }
+  }
+
+  public _setActiveNode(e: Event) {
     this.activeId = findMatchingTarget(e.target, this.scrollsAreas);
 
     // if its a touch device and we are autoscrolling
     // it should stop as soon as the user touches the scroll area
     // else there will be jerky effects
     if (this.hasTouch) {
-      this.cancelAutoScroll();
+      this._cancelAutoScroll();
     }
   }
 
-  private leftVelocityTracker() {
+  public _leftVelocityTracker() {
     const now = getTime();
     const elapsed = now - this.timeStamp;
     const delta = this.scrollLeft - this.lastScrollLeft;
@@ -154,7 +179,7 @@ export default class NativeScrollAugment {
     this.velocityLeft = this.settings.movingAverage * (1000 * delta / (1 + elapsed)) + 0.2 * this.velocityLeft;
   }
 
-  private topVelocityTracker() {
+  public _topVelocityTracker() {
     const now = getTime();
     const elapsed = now - this.timeStamp;
     const delta = this.scrollTop - this.lastScrollTop;
@@ -165,7 +190,7 @@ export default class NativeScrollAugment {
     this.velocityTop = this.settings.movingAverage * (1000 * delta / (1 + elapsed)) + 0.2 * this.velocityTop;
   }
 
-  private scrollTo(left: number, top: number) {
+  public scrollTo(left: number, top: number) {
     const correctedLeft = Math.round(left);
     const correctedTop = Math.round(top);
 
@@ -184,7 +209,7 @@ export default class NativeScrollAugment {
     });
   }
 
-  private onScroll(e: Event) {
+  public _onScroll(e: Event) {
     const target = (e.target as HTMLElement);
     let valX: number;
     let valY: number;
@@ -218,7 +243,7 @@ export default class NativeScrollAugment {
     });
   }
 
-  private autoScroll() {
+  public _autoScroll() {
     const TIME_CONST = 325;
     const elapsed = getTime() - this.timeStamp;
     let deltaY = 0;
@@ -248,21 +273,21 @@ export default class NativeScrollAugment {
     this.scrollTo(this.targetLeft + scrollX, this.targetTop + scrollY);
 
     if (scrollX !== 0 || scrollY !== 0) {
-      this.autoScrollTracker = requestAnimationFrame(this.autoScroll);
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
     } else {
       this.isAutoScrolling = false;
       this.autoScrollTracker = -1;
     }
   }
 
-  private triggerAutoScroll(
+  public _triggerAutoScroll(
     targetLeft: number,
     targetTop: number,
     amplitudeLeft: number,
     amplitudeTop: number,
   ) {
     if (amplitudeLeft !== 0 || amplitudeTop !== 0) {
-      this.cancelAutoScroll();
+      this._cancelAutoScroll();
 
       this.timeStamp = getTime();
       this.targetLeft = targetLeft;
@@ -271,11 +296,11 @@ export default class NativeScrollAugment {
       this.amplitudeTop = amplitudeTop;
 
       this.isAutoScrolling = true;
-      this.autoScrollTracker = requestAnimationFrame(this.autoScroll);
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
     }
   }
 
-  private cancelAutoScroll() {
+  public _cancelAutoScroll() {
     if (this.isAutoScrolling) {
       cancelAnimationFrame(this.autoScrollTracker);
       this.isAutoScrolling = false;
@@ -283,7 +308,7 @@ export default class NativeScrollAugment {
     }
   }
 
-  private resetMomentum() {
+  public _resetMomentum() {
     this.velocityTop = this.amplitudeTop = 0;
     this.velocityLeft = this.amplitudeLeft = 0;
 
@@ -291,28 +316,28 @@ export default class NativeScrollAugment {
     this.lastScrollLeft = this.scrollLeft;
   }
 
-  private tap(e: MouseEvent | TouchEvent) {
+  public _tap(e: MouseEvent | TouchEvent) {
     const point = getPoint(e, this.hasTouch);
 
     this.pressed = true;
     this.referenceX = point.x;
     this.referenceY = point.y;
 
-    this.resetMomentum();
+    this._resetMomentum();
 
     this.timeStamp = getTime();
 
-    this.cancelAutoScroll();
+    this._cancelAutoScroll();
 
-    this.$parent.addEventListener('mousemove', this.swipe, true);
-    this.$parent.addEventListener('mouseup', this.release, true);
+    this.$parent.addEventListener('mousemove', this._swipe.bind(this), true);
+    this.$parent.addEventListener('mouseup', this._release.bind(this), true);
 
     if (preventDefaultException((e.target as HTMLElement), this.settings.preventDefaultException)) {
       e.preventDefault();
     }
   }
 
-  private swipe(e: MouseEvent | TouchEvent) {
+  public _swipe(e: MouseEvent | TouchEvent) {
     const point = getPoint(e, this.hasTouch);
     let x;
     let y;
@@ -337,8 +362,8 @@ export default class NativeScrollAugment {
         deltaY = 0;
       }
 
-      this.leftVelocityTracker();
-      this.topVelocityTracker();
+      this._leftVelocityTracker();
+      this._topVelocityTracker();
 
       this.scrollTo(this.scrollLeft + deltaX, this.scrollTop + deltaY);
 
@@ -348,13 +373,13 @@ export default class NativeScrollAugment {
       }
       this.resetMomentumTracker = setTimeout(() => {
         if (this.pressed) {
-          this.resetMomentum();
+          this._resetMomentum();
         }
       }, 100);
     }
   }
 
-  private release() {
+  public _release() {
     let targetLeft = this.targetLeft;
     let targetTop = this.targetTop;
     let amplitudeLeft = this.amplitudeLeft;
@@ -362,8 +387,8 @@ export default class NativeScrollAugment {
 
     this.pressed = false;
 
-    this.topVelocityTracker();
-    this.leftVelocityTracker();
+    this._topVelocityTracker();
+    this._leftVelocityTracker();
 
     if (this.velocityLeft > 10 || this.velocityLeft < -10) {
       amplitudeLeft = 0.8 * this.velocityLeft;
@@ -378,70 +403,92 @@ export default class NativeScrollAugment {
       targetTop = this.scrollTop;
     }
 
-    this.triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
+    this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
 
-    this.$parent.removeEventListener('mousemove', this.swipe);
-    this.$parent.removeEventListener('mouseup', this.release);
+    this.$parent.removeEventListener('mousemove', this._swipe);
+    this.$parent.removeEventListener('mouseup', this._release);
   }
 
-  private scrollGen(start: boolean, left: boolean, top: boolean) {
-    return () => {
-      let targetLeft = 0;
-      let targetTop = 0;
-      let amplitudeLeft = 0;
-      let amplitudeTop = 0;
-      let maxScroll;
+  public _scrollToEdges(start: boolean, left: boolean, top: boolean) {
+    let targetLeft = 0;
+    let targetTop = 0;
+    let amplitudeLeft = 0;
+    let amplitudeTop = 0;
+    let maxScroll;
 
-      if (start) {
-        targetLeft = left ? 0 : this.scrollLeft;
-        targetTop = top ? 0 : this.scrollTop;
-        amplitudeLeft = left ? -this.scrollLeft : 0;
-        amplitudeTop = top ? -this.scrollTop : 0;
-      } else {
-        maxScroll = getMaxScroll(this.scrollsAreas);
-
-        targetLeft = left ? maxScroll.left : this.scrollLeft;
-        targetTop = top ? maxScroll.top : this.scrollTop;
-        amplitudeLeft = left ? maxScroll.left - this.scrollLeft : 0;
-        amplitudeTop = top ? maxScroll.top - this.scrollTop : 0;
-      }
-
-      this.triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
-    };
-  }
-
-  private scrollToBy(addTo: boolean) {
-    return (left: any, top: any) => {
-      let maxScroll;
-      let numLeft;
-      let corrLeft;
-      let numTop;
-      let corrTop;
-      let targetLeft;
-      let targetTop;
-      let moveLeft;
-      let moveTop;
-      let amplitudeLeft;
-      let amplitudeTop;
-
+    if (start) {
+      targetLeft = left ? 0 : this.scrollLeft;
+      targetTop = top ? 0 : this.scrollTop;
+      amplitudeLeft = left ? -this.scrollLeft : 0;
+      amplitudeTop = top ? -this.scrollTop : 0;
+    } else {
       maxScroll = getMaxScroll(this.scrollsAreas);
 
-      numLeft = parseInt(left, 10);
-      numTop = parseInt(top, 10);
+      targetLeft = left ? maxScroll.left : this.scrollLeft;
+      targetTop = top ? maxScroll.top : this.scrollTop;
+      amplitudeLeft = left ? maxScroll.left - this.scrollLeft : 0;
+      amplitudeTop = top ? maxScroll.top - this.scrollTop : 0;
+    }
 
-      corrLeft = isNaN(numLeft) ? this.scrollLeft : (addTo ? numLeft + this.scrollLeft : numLeft);
-      corrTop = isNaN(numTop) ? this.scrollTop : (addTo ? numTop + this.scrollTop : numTop);
+    this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
+  }
 
-      targetLeft = corrLeft > maxScroll.left ? maxScroll.left : (corrLeft < 0 ? 0 : corrLeft);
-      targetTop = corrTop > maxScroll.top ? maxScroll.top : (corrTop < 0 ? 0 : corrTop);
+  public _scrollToValue(addTo: boolean, left: any, top: any) {
+    let maxScroll;
+    let numLeft;
+    let corrLeft;
+    let numTop;
+    let corrTop;
+    let targetLeft;
+    let targetTop;
+    let moveLeft;
+    let moveTop;
+    let amplitudeLeft;
+    let amplitudeTop;
 
-      moveLeft = this.scrollLeft - targetLeft !== 0 ? true : false;
-      moveTop = this.scrollTop - targetTop !== 0 ? true : false;
+    maxScroll = getMaxScroll(this.scrollsAreas);
 
-      amplitudeLeft = moveLeft ? targetLeft - this.scrollLeft : 0;
-      amplitudeTop = moveTop ? targetTop - this.scrollTop : 0;
+    numLeft = parseInt(left, 10);
+    numTop = parseInt(top, 10);
 
-      this.triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
-    };
+    corrLeft = isNaN(numLeft) ? this.scrollLeft : (addTo ? numLeft + this.scrollLeft : numLeft);
+    corrTop = isNaN(numTop) ? this.scrollTop : (addTo ? numTop + this.scrollTop : numTop);
+
+    targetLeft = corrLeft > maxScroll.left ? maxScroll.left : (corrLeft < 0 ? 0 : corrLeft);
+    targetTop = corrTop > maxScroll.top ? maxScroll.top : (corrTop < 0 ? 0 : corrTop);
+
+    moveLeft = this.scrollLeft - targetLeft !== 0 ? true : false;
+    moveTop = this.scrollTop - targetTop !== 0 ? true : false;
+
+    amplitudeLeft = moveLeft ? targetLeft - this.scrollLeft : 0;
+    amplitudeTop = moveTop ? targetTop - this.scrollTop : 0;
+
+    this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
+  }
+
+  public scrollToStart() {
+    this._scrollToEdges(true, true, true);
+  }
+  public scrollToStartLeft() {
+    this._scrollToEdges(true, true, false);
+  }
+  public scrollToStartTop() {
+    this._scrollToEdges(true, false, true);
+  }
+  public scrollToEnd() {
+    this._scrollToEdges(false, true, true);
+  }
+  public scrollToEndLeft() {
+    this._scrollToEdges(false, true, false);
+  }
+  public scrollToEndTop() {
+    this._scrollToEdges(false, false, true);
+  }
+
+  public scrollToPosition(left: any, top: any) {
+    this._scrollToValue(false, left, top);
+  }
+  public scrollByValue(left: any, top: any) {
+    this._scrollToValue(true, left, top);
   }
 }
