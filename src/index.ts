@@ -112,9 +112,9 @@ export default class NativeScrollAugment {
   private referenceX: number;
   private referenceY: number;
   private pressed: boolean;
-  private _autoScrollTracker: number;
+  private autoScrollTracker: number;
   private isAutoScrolling: boolean;
-  private _resetMomentumTracker: number;
+  private resetMomentumTracker: number;
 
   private settings: ISettings;
 
@@ -351,10 +351,10 @@ export default class NativeScrollAugment {
     this.scrollTo(this.targetLeft + scrollX, this.targetTop + scrollY);
 
     if (scrollX !== 0 || scrollY !== 0) {
-      this._autoScrollTracker = requestAnimationFrame(this._autoScroll);
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
     } else {
       this.isAutoScrolling = false;
-      this._autoScrollTracker = -1;
+      this.autoScrollTracker = -1;
     }
   }
 
@@ -374,15 +374,15 @@ export default class NativeScrollAugment {
       this.amplitudeTop = amplitudeTop;
 
       this.isAutoScrolling = true;
-      this._autoScrollTracker = requestAnimationFrame(this._autoScroll);
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
     }
   }
 
   public _cancelAutoScroll() {
     if (this.isAutoScrolling) {
-      cancelAnimationFrame(this._autoScrollTracker);
+      cancelAnimationFrame(this.autoScrollTracker);
       this.isAutoScrolling = false;
-      this._autoScrollTracker = -1;
+      this.autoScrollTracker = -1;
     }
   }
 
@@ -445,11 +445,11 @@ export default class NativeScrollAugment {
 
       this.scrollTo(this.scrollLeft + deltaX, this.scrollTop + deltaY);
 
-      if (this._resetMomentumTracker !== -1) {
-        clearTimeout(this._resetMomentumTracker);
-        this._resetMomentumTracker = -1;
+      if (this.resetMomentumTracker !== -1) {
+        clearTimeout(this.resetMomentumTracker);
+        this.resetMomentumTracker = -1;
       }
-      this._resetMomentumTracker = setTimeout(() => {
+      this.resetMomentumTracker = setTimeout(() => {
         if (this.pressed) {
           this._resetMomentum();
         }
