@@ -81,15 +81,6 @@ export default class NativeScrollAugment {
     };
   }
 
-  public scrollToStart = NativeScrollAugment.scrollGen(this, true, true, true);
-  public scrollToStartLeft = NativeScrollAugment.scrollGen(this, true, true, false);
-  public scrollToStartTop = NativeScrollAugment.scrollGen(this, true, false, true);
-  public scrollToEnd = NativeScrollAugment.scrollGen(this, false, true, true);
-  public scrollToEndLeft = NativeScrollAugment.scrollGen(this, false, true, false);
-  public scrollToEndTop = NativeScrollAugment.scrollGen(this, false, false, true);
-  public scrollToPosition = NativeScrollAugment.scrollToBy(this, false);
-  public scrollByValue = NativeScrollAugment.scrollToBy(this, true);
-
   private hasTouch: boolean;
   private DETECT_EVT: string;
   private activeId: string;
@@ -478,4 +469,13 @@ export default class NativeScrollAugment {
     this.$parent.removeEventListener('mousemove', this._swipe);
     this.$parent.removeEventListener('mouseup', this._release);
   }
+
+  public scrollToStart = NativeScrollAugment.scrollGen(this, true, true, true);
+  public scrollToStartLeft = NativeScrollAugment.scrollGen(this, true, true, false);
+  public scrollToStartTop = NativeScrollAugment.scrollGen(this, true, false, true);
+  public scrollToEnd = NativeScrollAugment.scrollGen(this, false, true, true);
+  public scrollToEndLeft = NativeScrollAugment.scrollGen(this, false, true, false);
+  public scrollToEndTop = NativeScrollAugment.scrollGen(this, false, false, true);
+  public scrollToPosition = NativeScrollAugment.scrollToBy(this, false);
+  public scrollByValue = NativeScrollAugment.scrollToBy(this, true);
 }

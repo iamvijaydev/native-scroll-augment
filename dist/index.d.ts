@@ -1,5 +1,7 @@
 import { ISettingsOptional } from './defaultOptions';
 export default class NativeScrollAugment {
+    static scrollGen(context: NativeScrollAugment, start: boolean, left: boolean, top: boolean): () => void;
+    static scrollToBy(context: NativeScrollAugment, addTo: boolean): (left: any, top: any) => void;
     scrollToStart: () => void;
     scrollToStartLeft: () => void;
     scrollToStartTop: () => void;
@@ -38,18 +40,18 @@ export default class NativeScrollAugment {
     });
     destroy(): void;
     init(): void;
-    private setActiveNode(e);
-    private leftVelocityTracker();
-    private topVelocityTracker();
-    private scrollTo(left, top);
-    private onScroll(e);
-    private autoScroll();
-    private triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
-    private cancelAutoScroll();
-    private resetMomentum();
-    private tap(e);
-    private swipe(e);
-    private release();
-    private scrollGen(start, left, top);
-    private scrollToBy(addTo);
+    updateOptions(options: ISettingsOptional): void;
+    replaceScrollAreas(scrollsAreas: HTMLElement[], left?: number, top?: number): void;
+    _setActiveNode(e: Event): void;
+    _leftVelocityTracker(): void;
+    _topVelocityTracker(): void;
+    scrollTo(left: number, top: number): void;
+    _onScroll(e: Event): void;
+    _autoScroll(): void;
+    _triggerAutoScroll(targetLeft: number, targetTop: number, amplitudeLeft: number, amplitudeTop: number): void;
+    _cancelAutoScroll(): void;
+    _resetMomentum(): void;
+    _tap(e: MouseEvent | TouchEvent): void;
+    _swipe(e: MouseEvent | TouchEvent): void;
+    _release(): void;
 }
