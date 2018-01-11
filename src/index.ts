@@ -1,15 +1,17 @@
 import {
-    isElement,
-    isArray,
-    isString,
-    extend,
+  isElement,
+  isArray,
+  isString,
+  extend,
+  find,
+  isUndefined
 } from 'lodash';
 import {
-    findMatchingTarget,
-    getTime,
-    getPoint,
-    preventDefaultException,
-    getMaxScroll,
+  findMatchingTarget,
+  getTime,
+  getPoint,
+  preventDefaultException,
+  getMaxScroll,
 } from './utils.js';
 import {
   defaultOptions,
@@ -190,6 +192,46 @@ export default class NativeScrollAugment {
 
     if (!this.hasTouch && this.settings.enableKinetics) {
       this.$parent.addEventListener('mousedown', this.tap, true);
+    }
+  }
+
+  public updateOptions(options: ISettingsOptional) {
+    this.settings = extend(
+      {},
+      defaultOptions,
+      options,
+    );
+  }
+
+  public replaceScrollAreas(scrollsAreas: HTMLElement[]) {
+    let ok = true;
+    let notElement: {
+      $node: HTMLElement;
+      index: number;
+    } | undefined;
+
+    if (!isArray(scrollsAreas)) {
+      console.error(`Argument should be an array. Provided ${typeof scrollsAreas}`);
+      ok = false;
+    } else {
+      scrollsAreas.forEach(($node, index) => {
+        if (!isElement($node)) {
+          console.error(`Entries in argument should be an element.
+            Provided ${typeof $node} at index ${index}`);
+          ok = false;
+        }
+      });
+    }
+
+    if (ok) {
+      this.cancelAutoScroll();
+
+      this.scrollTop = 0;
+      this.scrollLeft = 0;
+
+      this.resetMomentum();
+
+      this.scrollsAreas = scrollsAreas;
     }
   }
 
