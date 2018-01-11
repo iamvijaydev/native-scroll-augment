@@ -10,6 +10,10 @@ import {
   startKineticScroll
 } from './kinetic-scroll'
 import {
+  loadExposedMethodsScroll,
+  startExposedMethodsScroll
+} from './exposed-methods'
+import {
   styles
 } from './styles'
 import { injectStyles } from './utils'
@@ -17,10 +21,12 @@ import { injectStyles } from './utils'
 
 const $container = document.querySelector('#container')
 const $menu = document.querySelector('#menu')
+let $currentMenu = document.querySelector('#default')
+const $exposedMethods = document.querySelector('#exposed-methods')
+
 let currentInst = {
   destroy: () => {}
 };
-let $currentMenu = document.querySelector('#default')
 
 const findMatchingNode = (target, node) => {
 
@@ -40,47 +46,85 @@ const processClick = (id) => {
   switch(id) {
     case 'load-connect-scroll-eg-1':
       currentInst.destroy();
-      loadConnectScrollEg1($container)
+      return loadConnectScrollEg1($container)
         .then(({ $parent, scrollAreas }) => {
           currentInst = startConnectScrollEg1($parent, scrollAreas)
+
+          return true
         })
-      return;
 
     case 'load-connect-scroll-eg-2':
       currentInst.destroy();
-      loadConnectScrollEg2($container)
+      return loadConnectScrollEg2($container)
         .then(({ $parent, scrollAreas }) => {
           currentInst = startConnectScrollEg2($parent, scrollAreas)
+
+          return true
         })
-      return;
 
     case 'load-kinetic-scroll':
       currentInst.destroy();
-      loadKineticScroll($container)
+      return loadKineticScroll($container)
         .then(({ $parent, scrollAreas }) => {
           currentInst = startKineticScroll($parent, scrollAreas)
+
+          return true
         })
-      return;
+
+    case 'load-exposed-methods':
+      currentInst.destroy();
+      return loadExposedMethodsScroll($container)
+        .then(({ $parent, scrollAreas }) => {
+          currentInst = startExposedMethodsScroll($parent, scrollAreas)
+
+          return true
+        })
 
     default:
-      return;
+      return new Promise(resolve => resolve(true))
   }
 }
 
-const clickHandler = (event) => {
+const chooseMenuHandler = (event) => {
   const $found = findMatchingNode(event.target, 'DIV')
 
   if ($found && !$found.classList.contains('active')) {
-    $currentMenu.classList.remove('active');
     $found.classList.add('active')
 
+    $currentMenu.classList.remove('active');
     $currentMenu = $found;
 
     processClick($found.id);
   }
 }
 
-$menu.addEventListener('click', clickHandler, false)
+$menu.addEventListener('click', chooseMenuHandler, false)
+
+const processExposedMethodsHandler = (event) => {
+  event.stopPropagation();
+
+  // if not loaded
+  if ($currentMenu.id !== 'load-exposed-methods') {
+    $currentMenu.classList.remove('active')
+    $currentMenu = document.querySelector('#load-exposed-methods')
+    $currentMenu.classList.remove('active')
+
+    processClick('load-exposed-methods')
+  }
+  
+  const $found = findMatchingNode(event.target, 'DIV')
+
+  switch ($found.id) {
+    case value:
+      
+      break;
+  
+    default:
+      break;
+  }
+}
+
+$exposedMethods.addEventListener('click', processExposedMethodsHandler, false)
 
 injectStyles({
   uid: 'COMMON_STYLES',
