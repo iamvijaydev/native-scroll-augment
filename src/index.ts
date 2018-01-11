@@ -160,14 +160,6 @@ export default class NativeScrollAugment {
     this.pressed = false;
     this.isAutoScrolling = false;
 
-    this._setActiveNode = this._setActiveNode.bind(this);
-    this._onScroll = this._onScroll.bind(this);
-    this._autoScroll = this._autoScroll.bind(this);
-
-    this._tap = this._tap.bind(this);
-    this._swipe = this._swipe.bind(this);
-    this._release = this._release.bind(this);
-
     this.settings = extend(
       {},
       defaultOptions,
@@ -187,11 +179,11 @@ export default class NativeScrollAugment {
   }
 
   public init() {
-    this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
-    this.$parent.addEventListener('scroll', this._onScroll, true);
+    this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode.bind(this), true);
+    this.$parent.addEventListener('scroll', this._onScroll.bind(this), true);
 
     if (!this.hasTouch && this.settings.enableKinetics) {
-      this.$parent.addEventListener('mousedown', this._tap, true);
+      this.$parent.addEventListener('mousedown', this._tap.bind(this), true);
     }
   }
 
@@ -351,7 +343,7 @@ export default class NativeScrollAugment {
     this.scrollTo(this.targetLeft + scrollX, this.targetTop + scrollY);
 
     if (scrollX !== 0 || scrollY !== 0) {
-      this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
     } else {
       this.isAutoScrolling = false;
       this.autoScrollTracker = -1;
@@ -374,7 +366,7 @@ export default class NativeScrollAugment {
       this.amplitudeTop = amplitudeTop;
 
       this.isAutoScrolling = true;
-      this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
     }
   }
 
@@ -407,8 +399,8 @@ export default class NativeScrollAugment {
 
     this._cancelAutoScroll();
 
-    this.$parent.addEventListener('mousemove', this._swipe, true);
-    this.$parent.addEventListener('mouseup', this._release, true);
+    this.$parent.addEventListener('mousemove', this._swipe.bind(this), true);
+    this.$parent.addEventListener('mouseup', this._release.bind(this), true);
 
     if (preventDefaultException((e.target as HTMLElement), this.settings.preventDefaultException)) {
       e.preventDefault();
