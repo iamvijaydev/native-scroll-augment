@@ -1,11 +1,29 @@
 export const exposedData = () => {
-  const ul = document.createElement('ul')
-  let li;
+  const yCount = 20;
+  const xCount = 30;
+  const xGrid = document.createElement('div')
 
-  for (let i = 0; i < 100; i++) {
-    li = document.createElement('li')
-    ul.appendChild(li)
+  xGrid.classList.add('grid-wrap')
+
+  for (let i = 0; i < yCount; i++) {
+    let gridRow = document.createElement('div')
+    let gridItem
+
+    gridRow.classList.add('grid-row')
+
+    for (let j = 0; j < xCount; j++) {
+      gridItem = document.createElement('div')
+      gridItem.classList.add('each-item')
+
+      if (i % 3 === 0) {
+        gridItem.classList.add('active')
+      }
+
+      gridRow.appendChild(gridItem)
+    }
+
+    xGrid.appendChild(gridRow)
   }
 
-  return ul;
+  return xGrid;
 }

@@ -25,7 +25,7 @@ export const startExposedMethodsScroll = ($parent, scrollAreas) => {
   const $scrollArea1 = scrollAreas[0]
 
   $parent.classList.add('parent')
-  $scrollArea1.classList.add('area')
+  $scrollArea1.classList.add('grid')
   injectStyles({
     uid: 'EXPOSED_METHODS_STYLES',
     styles
