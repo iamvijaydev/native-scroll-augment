@@ -24,6 +24,10 @@ const forEg2 = () => {
   for (let i = 0; i < yCount; i++) {
     let child = document.createElement('li')
 
+    if (i % 3 === 0) {
+      child.classList.add('active')
+    }
+
     yList.appendChild(child)
   }
 
@@ -37,12 +41,18 @@ const forEg2 = () => {
     for (let j = 0; j < xCount; j ++) {
       gridItem = document.createElement('div')
       gridItem.classList.add('each-item')
+
+      if (i % 3 === 0) {
+        gridItem.classList.add('active')
+      }
+
       gridRow.appendChild(gridItem)
 
       if (i === 0) {
-        gridItem = document.createElement('div')
-        gridItem.classList.add('each-item')
-        xHeading.appendChild(gridItem)
+        headItem = document.createElement('div')
+        headItem.classList.add('each-item')
+
+        xHeading.appendChild(headItem)
       }
     }
 

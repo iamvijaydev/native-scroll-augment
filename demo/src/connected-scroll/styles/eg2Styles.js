@@ -40,6 +40,12 @@ export const styles = `
     right: 20px;
     border-radius: 10px;
   }
+  .sidebar li.active {
+    background: #eaeaea;
+  }
+  .sidebar li.active:after {
+    background: #ccc;
+  }
 
   .each-item {
     padding: 20px 0;
@@ -47,7 +53,6 @@ export const styles = `
     position: relative;
     width: 100px;
     flex-basis: 100px;
-    border-bottom: 1px solid #eaeaea;
     border-right: 1px solid #eaeaea;
   }
   .each-item:after {
@@ -62,6 +67,7 @@ export const styles = `
   }
   .each-item.active {
     background: #eaeaea;
+    border-right: 1px solid #d8d8d8;
   }
   .each-item.active:after {
     background: #ccc;
@@ -96,7 +102,7 @@ export const styles = `
     overflow: auto;
     position: absolute;
     left: 200px;
-    top: 50px;
+    top: 62px;
     right: 0;
     bottom: 0;
   }
@@ -106,5 +112,8 @@ export const styles = `
   }
   .grid-row {
     display: flex;
+  }
+  .grid-row:not(:last-child) {
+    border-bottom: 1px solid #eaeaea;
   }
 `

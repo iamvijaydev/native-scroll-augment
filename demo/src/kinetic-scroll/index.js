@@ -17,12 +17,12 @@ export const loadKineticScroll = ($root) => {
     $root.innerHTML = ''
     $root.appendChild($parent)
 
-    resolve($parent)
+    resolve({ $parent, scrollAreas: [$scrollArea1] })
   })
 }
 
-export const startKineticScroll = ($parent) => {
-  const $scrollArea1 = document.querySelector('#scroll-area-1')
+export const startKineticScroll = ($parent, scrollAreas) => {
+  const $scrollArea1 = scrollAreas[0]
 
   $parent.classList.add('parent')
   $scrollArea1.classList.add('area')

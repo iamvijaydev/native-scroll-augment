@@ -23,13 +23,13 @@ export const loadConnectScrollEg1 = ($root) => {
     $root.innerHTML = ''
     $root.appendChild($parent)
 
-    resolve($parent)
+    resolve({ $parent, scrollAreas: [$scrollArea1, $scrollArea2] })
   })
 }
 
-export const startConnectScrollEg1 = ($parent) => {
-  const $scrollArea1 = document.querySelector('#scroll-area-1')
-  const $scrollArea2 = document.querySelector('#scroll-area-2')
+export const startConnectScrollEg1 = ($parent, scrollAreas) => {
+  const $scrollArea1 = scrollAreas[0]
+  const $scrollArea2 = scrollAreas[1]
 
   $parent.classList.add('parent')
   $scrollArea1.classList.add('area')
@@ -72,21 +72,19 @@ export const loadConnectScrollEg2 = ($root) => {
     $root.innerHTML = ''
     $root.appendChild($parent)
 
-    resolve($parent)
+    resolve({ $parent, scrollAreas: [$scrollArea1, $scrollArea2, $scrollArea3] })
   })
 }
 
-export const startConnectScrollEg2 = ($parent) => {
-  const $scrollArea1 = document.querySelector('#scroll-area-1')
-  const $scrollArea2 = document.querySelector('#scroll-area-2')
-  const $scrollArea3 = document.querySelector('#scroll-area-3')
+export const startConnectScrollEg2 = ($parent, scrollAreas) => {
+  const $scrollArea1 = scrollAreas[0]
+  const $scrollArea2 = scrollAreas[1]
+  const $scrollArea3 = scrollAreas[2]
   const {
     yList,
     xHeading,
     xGrid
   } = generateData.forEg2()
-
-  console.log($parent)
 
   $parent.classList.add('parent')
   $scrollArea1.classList.add('sidebar')

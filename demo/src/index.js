@@ -41,24 +41,24 @@ const processClick = (id) => {
     case 'load-connect-scroll-eg-1':
       currentInst.destroy();
       loadConnectScrollEg1($container)
-        .then(($parent) => {
-          currentInst = startConnectScrollEg1($parent)
+        .then(({ $parent, scrollAreas }) => {
+          currentInst = startConnectScrollEg1($parent, scrollAreas)
         })
       return;
 
     case 'load-connect-scroll-eg-2':
       currentInst.destroy();
       loadConnectScrollEg2($container)
-        .then(($parent) => {
-          currentInst = startConnectScrollEg2($parent)
+        .then(({ $parent, scrollAreas }) => {
+          currentInst = startConnectScrollEg2($parent, scrollAreas)
         })
       return;
 
     case 'load-kinetic-scroll':
       currentInst.destroy();
       loadKineticScroll($container)
-        .then(($parent) => {
-          currentInst = startKineticScroll($parent)
+        .then(({ $parent, scrollAreas }) => {
+          currentInst = startKineticScroll($parent, scrollAreas)
         })
       return;
 
