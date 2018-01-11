@@ -1,15 +1,5 @@
 import { ISettingsOptional } from './defaultOptions';
 export default class NativeScrollAugment {
-    static scrollGen(context: NativeScrollAugment, start: boolean, left: boolean, top: boolean): () => void;
-    static scrollToBy(context: NativeScrollAugment, addTo: boolean): (left: any, top: any) => void;
-    scrollToStart: () => void;
-    scrollToStartLeft: () => void;
-    scrollToStartTop: () => void;
-    scrollToEnd: () => void;
-    scrollToEndLeft: () => void;
-    scrollToEndTop: () => void;
-    scrollToPosition: (left: any, top: any) => void;
-    scrollByValue: (left: any, top: any) => void;
     private hasTouch;
     private DETECT_EVT;
     private activeId;
@@ -54,4 +44,14 @@ export default class NativeScrollAugment {
     _tap(e: MouseEvent | TouchEvent): void;
     _swipe(e: MouseEvent | TouchEvent): void;
     _release(): void;
+    _scrollToEdges(start: boolean, left: boolean, top: boolean): void;
+    _scrollToValue(addTo: boolean, left: any, top: any): void;
+    scrollToStart(): void;
+    scrollToStartLeft(): void;
+    scrollToStartTop(): void;
+    scrollToEnd(): void;
+    scrollToEndLeft(): void;
+    scrollToEndTop(): void;
+    scrollToPosition(left: any, top: any): void;
+    scrollByValue(left: any, top: any): void;
 }

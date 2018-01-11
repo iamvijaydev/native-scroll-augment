@@ -5,14 +5,6 @@ var utils_js_1 = require("./utils.js");
 var defaultOptions_1 = require("./defaultOptions");
 var NativeScrollAugment = /** @class */ (function () {
     function NativeScrollAugment(props) {
-        this.scrollToStart = NativeScrollAugment.scrollGen(this, true, true, true);
-        this.scrollToStartLeft = NativeScrollAugment.scrollGen(this, true, true, false);
-        this.scrollToStartTop = NativeScrollAugment.scrollGen(this, true, false, true);
-        this.scrollToEnd = NativeScrollAugment.scrollGen(this, false, true, true);
-        this.scrollToEndLeft = NativeScrollAugment.scrollGen(this, false, true, false);
-        this.scrollToEndTop = NativeScrollAugment.scrollGen(this, false, false, true);
-        this.scrollToPosition = NativeScrollAugment.scrollToBy(this, false);
-        this.scrollByValue = NativeScrollAugment.scrollToBy(this, true);
         if (!lodash_1.isElement(props.parent)) {
             throw new Error("First argument should be an element. Provided " + typeof props.parent);
         }
@@ -46,56 +38,6 @@ var NativeScrollAugment = /** @class */ (function () {
         this.isAutoScrolling = false;
         this.settings = lodash_1.extend({}, defaultOptions_1.defaultOptions, props.options);
     }
-    NativeScrollAugment.scrollGen = function (context, start, left, top) {
-        return function () {
-            var targetLeft = 0;
-            var targetTop = 0;
-            var amplitudeLeft = 0;
-            var amplitudeTop = 0;
-            var maxScroll;
-            if (start) {
-                targetLeft = left ? 0 : context.scrollLeft;
-                targetTop = top ? 0 : context.scrollTop;
-                amplitudeLeft = left ? -context.scrollLeft : 0;
-                amplitudeTop = top ? -context.scrollTop : 0;
-            }
-            else {
-                maxScroll = utils_js_1.getMaxScroll(context.scrollsAreas);
-                targetLeft = left ? maxScroll.left : context.scrollLeft;
-                targetTop = top ? maxScroll.top : context.scrollTop;
-                amplitudeLeft = left ? maxScroll.left - context.scrollLeft : 0;
-                amplitudeTop = top ? maxScroll.top - context.scrollTop : 0;
-            }
-            context._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
-        };
-    };
-    NativeScrollAugment.scrollToBy = function (context, addTo) {
-        return function (left, top) {
-            var maxScroll;
-            var numLeft;
-            var corrLeft;
-            var numTop;
-            var corrTop;
-            var targetLeft;
-            var targetTop;
-            var moveLeft;
-            var moveTop;
-            var amplitudeLeft;
-            var amplitudeTop;
-            maxScroll = utils_js_1.getMaxScroll(context.scrollsAreas);
-            numLeft = parseInt(left, 10);
-            numTop = parseInt(top, 10);
-            corrLeft = isNaN(numLeft) ? context.scrollLeft : (addTo ? numLeft + context.scrollLeft : numLeft);
-            corrTop = isNaN(numTop) ? context.scrollTop : (addTo ? numTop + context.scrollTop : numTop);
-            targetLeft = corrLeft > maxScroll.left ? maxScroll.left : (corrLeft < 0 ? 0 : corrLeft);
-            targetTop = corrTop > maxScroll.top ? maxScroll.top : (corrTop < 0 ? 0 : corrTop);
-            moveLeft = context.scrollLeft - targetLeft !== 0 ? true : false;
-            moveTop = context.scrollTop - targetTop !== 0 ? true : false;
-            amplitudeLeft = moveLeft ? targetLeft - context.scrollLeft : 0;
-            amplitudeTop = moveTop ? targetTop - context.scrollTop : 0;
-            context._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
-        };
-    };
     NativeScrollAugment.prototype.destroy = function () {
         this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
         this.$parent.addEventListener('scroll', this._onScroll, true);
@@ -349,6 +291,76 @@ var NativeScrollAugment = /** @class */ (function () {
         this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
         this.$parent.removeEventListener('mousemove', this._swipe);
         this.$parent.removeEventListener('mouseup', this._release);
+    };
+    NativeScrollAugment.prototype._scrollToEdges = function (start, left, top) {
+        var targetLeft = 0;
+        var targetTop = 0;
+        var amplitudeLeft = 0;
+        var amplitudeTop = 0;
+        var maxScroll;
+        if (start) {
+            targetLeft = left ? 0 : this.scrollLeft;
+            targetTop = top ? 0 : this.scrollTop;
+            amplitudeLeft = left ? -this.scrollLeft : 0;
+            amplitudeTop = top ? -this.scrollTop : 0;
+        }
+        else {
+            maxScroll = utils_js_1.getMaxScroll(this.scrollsAreas);
+            targetLeft = left ? maxScroll.left : this.scrollLeft;
+            targetTop = top ? maxScroll.top : this.scrollTop;
+            amplitudeLeft = left ? maxScroll.left - this.scrollLeft : 0;
+            amplitudeTop = top ? maxScroll.top - this.scrollTop : 0;
+        }
+        this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
+    };
+    NativeScrollAugment.prototype._scrollToValue = function (addTo, left, top) {
+        var maxScroll;
+        var numLeft;
+        var corrLeft;
+        var numTop;
+        var corrTop;
+        var targetLeft;
+        var targetTop;
+        var moveLeft;
+        var moveTop;
+        var amplitudeLeft;
+        var amplitudeTop;
+        maxScroll = utils_js_1.getMaxScroll(this.scrollsAreas);
+        numLeft = parseInt(left, 10);
+        numTop = parseInt(top, 10);
+        corrLeft = isNaN(numLeft) ? this.scrollLeft : (addTo ? numLeft + this.scrollLeft : numLeft);
+        corrTop = isNaN(numTop) ? this.scrollTop : (addTo ? numTop + this.scrollTop : numTop);
+        targetLeft = corrLeft > maxScroll.left ? maxScroll.left : (corrLeft < 0 ? 0 : corrLeft);
+        targetTop = corrTop > maxScroll.top ? maxScroll.top : (corrTop < 0 ? 0 : corrTop);
+        moveLeft = this.scrollLeft - targetLeft !== 0 ? true : false;
+        moveTop = this.scrollTop - targetTop !== 0 ? true : false;
+        amplitudeLeft = moveLeft ? targetLeft - this.scrollLeft : 0;
+        amplitudeTop = moveTop ? targetTop - this.scrollTop : 0;
+        this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
+    };
+    NativeScrollAugment.prototype.scrollToStart = function () {
+        this._scrollToEdges(true, true, true);
+    };
+    NativeScrollAugment.prototype.scrollToStartLeft = function () {
+        this._scrollToEdges(true, true, false);
+    };
+    NativeScrollAugment.prototype.scrollToStartTop = function () {
+        this._scrollToEdges(true, false, true);
+    };
+    NativeScrollAugment.prototype.scrollToEnd = function () {
+        this._scrollToEdges(false, true, true);
+    };
+    NativeScrollAugment.prototype.scrollToEndLeft = function () {
+        this._scrollToEdges(false, true, false);
+    };
+    NativeScrollAugment.prototype.scrollToEndTop = function () {
+        this._scrollToEdges(false, false, true);
+    };
+    NativeScrollAugment.prototype.scrollToPosition = function (left, top) {
+        this._scrollToValue(false, left, top);
+    };
+    NativeScrollAugment.prototype.scrollByValue = function (left, top) {
+        this._scrollToValue(true, left, top);
     };
     return NativeScrollAugment;
 }());
