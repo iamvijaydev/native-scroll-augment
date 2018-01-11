@@ -114,14 +114,45 @@ const processExposedMethodsHandler = (event) => {
   
   const $found = findMatchingNode(event.target, 'DIV')
 
-  switch ($found.id) {
-    case value:
-      
-      break;
-  
-    default:
-      break;
-  }
+  setTimeout(() => {
+    console.log($found.id)
+    switch ($found.id) {
+      case 'scroll-to-start':
+        currentInst.scrollToStart();
+        return;
+        
+      case 'scroll-to-start-left':
+        currentInst.scrollToStartLeft();
+        return;
+
+      case 'scroll-to-start-top':
+        currentInst.scrollToStartTop();
+        return;
+
+      case 'scroll-to-end':
+        currentInst.scrollToEnd();
+        return;
+
+      case 'scroll-to-end-left':
+        currentInst.scrollToEndLeft();
+        return;
+
+      case 'scroll-to-end-top':
+        currentInst.scrollToEndTop();
+        return;
+
+      case 'scroll-to-start1':
+        currentInst.scrollToStart();
+        return;
+
+      case 'scroll-to-start2':
+        currentInst.scrollToStart();
+        return;
+
+      default:
+        break;
+    }
+  }, 10)
 }
 
 $exposedMethods.addEventListener('click', processExposedMethodsHandler, false)
