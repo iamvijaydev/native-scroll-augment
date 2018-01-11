@@ -4,7 +4,7 @@ import {
   isString,
   extend,
   find,
-  isUndefined
+  isNumber
 } from 'lodash';
 import {
   findMatchingTarget,
@@ -203,7 +203,7 @@ export default class NativeScrollAugment {
     );
   }
 
-  public replaceScrollAreas(scrollsAreas: HTMLElement[]) {
+  public replaceScrollAreas(scrollsAreas: HTMLElement[], left?: number, top?: number) {
     let ok = true;
     let notElement: {
       $node: HTMLElement;
@@ -226,8 +226,8 @@ export default class NativeScrollAugment {
     if (ok) {
       this.cancelAutoScroll();
 
-      this.scrollTop = 0;
-      this.scrollLeft = 0;
+      this.scrollLeft = isNumber(left) ? left : 0;
+      this.scrollTop = isNumber(top) ? top : 0;
 
       this.resetMomentum();
 
