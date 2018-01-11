@@ -20,67 +20,6 @@ import {
 } from './defaultOptions';
 
 export default class NativeScrollAugment {
-  static scrollGen(context: NativeScrollAugment, start: boolean, left: boolean, top: boolean) {
-    return () => {
-      let targetLeft = 0;
-      let targetTop = 0;
-      let amplitudeLeft = 0;
-      let amplitudeTop = 0;
-      let maxScroll;
-
-      if (start) {
-        targetLeft = left ? 0 : context.scrollLeft;
-        targetTop = top ? 0 : context.scrollTop;
-        amplitudeLeft = left ? -context.scrollLeft : 0;
-        amplitudeTop = top ? -context.scrollTop : 0;
-      } else {
-        maxScroll = getMaxScroll(context.scrollsAreas);
-
-        targetLeft = left ? maxScroll.left : context.scrollLeft;
-        targetTop = top ? maxScroll.top : context.scrollTop;
-        amplitudeLeft = left ? maxScroll.left - context.scrollLeft : 0;
-        amplitudeTop = top ? maxScroll.top - context.scrollTop : 0;
-      }
-
-      context._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
-    };
-  }
-
-  static scrollToBy(context: NativeScrollAugment, addTo: boolean) {
-    return (left: any, top: any) => {
-      let maxScroll;
-      let numLeft;
-      let corrLeft;
-      let numTop;
-      let corrTop;
-      let targetLeft;
-      let targetTop;
-      let moveLeft;
-      let moveTop;
-      let amplitudeLeft;
-      let amplitudeTop;
-
-      maxScroll = getMaxScroll(context.scrollsAreas);
-
-      numLeft = parseInt(left, 10);
-      numTop = parseInt(top, 10);
-
-      corrLeft = isNaN(numLeft) ? context.scrollLeft : (addTo ? numLeft + context.scrollLeft : numLeft);
-      corrTop = isNaN(numTop) ? context.scrollTop : (addTo ? numTop + context.scrollTop : numTop);
-
-      targetLeft = corrLeft > maxScroll.left ? maxScroll.left : (corrLeft < 0 ? 0 : corrLeft);
-      targetTop = corrTop > maxScroll.top ? maxScroll.top : (corrTop < 0 ? 0 : corrTop);
-
-      moveLeft = context.scrollLeft - targetLeft !== 0 ? true : false;
-      moveTop = context.scrollTop - targetTop !== 0 ? true : false;
-
-      amplitudeLeft = moveLeft ? targetLeft - context.scrollLeft : 0;
-      amplitudeTop = moveTop ? targetTop - context.scrollTop : 0;
-
-      context._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
-    };
-  }
-
   private hasTouch: boolean;
   private DETECT_EVT: string;
   private activeId: string;
@@ -470,12 +409,86 @@ export default class NativeScrollAugment {
     this.$parent.removeEventListener('mouseup', this._release);
   }
 
-  public scrollToStart = NativeScrollAugment.scrollGen(this, true, true, true);
-  public scrollToStartLeft = NativeScrollAugment.scrollGen(this, true, true, false);
-  public scrollToStartTop = NativeScrollAugment.scrollGen(this, true, false, true);
-  public scrollToEnd = NativeScrollAugment.scrollGen(this, false, true, true);
-  public scrollToEndLeft = NativeScrollAugment.scrollGen(this, false, true, false);
-  public scrollToEndTop = NativeScrollAugment.scrollGen(this, false, false, true);
-  public scrollToPosition = NativeScrollAugment.scrollToBy(this, false);
-  public scrollByValue = NativeScrollAugment.scrollToBy(this, true);
+  public _scrollToEdges(start: boolean, left: boolean, top: boolean) {
+    let targetLeft = 0;
+    let targetTop = 0;
+    let amplitudeLeft = 0;
+    let amplitudeTop = 0;
+    let maxScroll;
+
+    if (start) {
+      targetLeft = left ? 0 : this.scrollLeft;
+      targetTop = top ? 0 : this.scrollTop;
+      amplitudeLeft = left ? -this.scrollLeft : 0;
+      amplitudeTop = top ? -this.scrollTop : 0;
+    } else {
+      maxScroll = getMaxScroll(this.scrollsAreas);
+
+      targetLeft = left ? maxScroll.left : this.scrollLeft;
+      targetTop = top ? maxScroll.top : this.scrollTop;
+      amplitudeLeft = left ? maxScroll.left - this.scrollLeft : 0;
+      amplitudeTop = top ? maxScroll.top - this.scrollTop : 0;
+    }
+
+    this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
+  }
+
+  public _scrollToValue(addTo: boolean, left: any, top: any) {
+    let maxScroll;
+    let numLeft;
+    let corrLeft;
+    let numTop;
+    let corrTop;
+    let targetLeft;
+    let targetTop;
+    let moveLeft;
+    let moveTop;
+    let amplitudeLeft;
+    let amplitudeTop;
+
+    maxScroll = getMaxScroll(this.scrollsAreas);
+
+    numLeft = parseInt(left, 10);
+    numTop = parseInt(top, 10);
+
+    corrLeft = isNaN(numLeft) ? this.scrollLeft : (addTo ? numLeft + this.scrollLeft : numLeft);
+    corrTop = isNaN(numTop) ? this.scrollTop : (addTo ? numTop + this.scrollTop : numTop);
+
+    targetLeft = corrLeft > maxScroll.left ? maxScroll.left : (corrLeft < 0 ? 0 : corrLeft);
+    targetTop = corrTop > maxScroll.top ? maxScroll.top : (corrTop < 0 ? 0 : corrTop);
+
+    moveLeft = this.scrollLeft - targetLeft !== 0 ? true : false;
+    moveTop = this.scrollTop - targetTop !== 0 ? true : false;
+
+    amplitudeLeft = moveLeft ? targetLeft - this.scrollLeft : 0;
+    amplitudeTop = moveTop ? targetTop - this.scrollTop : 0;
+
+    this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
+  }
+
+  public scrollToStart() {
+    this._scrollToEdges(true, true, true);
+  }
+  public scrollToStartLeft() {
+    this._scrollToEdges(true, true, false);
+  }
+  public scrollToStartTop() {
+    this._scrollToEdges(true, false, true);
+  }
+  public scrollToEnd() {
+    this._scrollToEdges(false, true, true);
+  }
+  public scrollToEndLeft() {
+    this._scrollToEdges(false, true, false);
+  }
+  public scrollToEndTop() {
+    this._scrollToEdges(false, false, true);
+  }
+
+  public scrollToPosition(left: any, top: any) {
+    this._scrollToValue(false, left, top);
+  }
+  public scrollByValue(left: any, top: any) {
+    this._scrollToValue(true, left, top);
+  }
 }
