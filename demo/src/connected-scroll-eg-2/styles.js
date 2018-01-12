@@ -47,32 +47,6 @@ export const styles = `
     background: #ccc;
   }
 
-  .each-item {
-    padding: 20px 0;
-    height: 25px;
-    position: relative;
-    width: 100px;
-    flex-basis: 100px;
-    border-right: 1px solid #eaeaea;
-  }
-  .each-item:after {
-    content: ' ';
-    position: absolute;
-    top: 20px;
-    height: 25px;
-    background: #eaeaea;
-    left: 20px;
-    right: 20px;
-    border-radius: 10px;
-  }
-  .each-item.active {
-    background: #eaeaea;
-    border-right: 1px solid #d8d8d8;
-  }
-  .each-item.active:after {
-    background: #ccc;
-  }
-
   .header {
     overflow-x: auto;
     overflow-y: hidden;
@@ -98,22 +72,8 @@ export const styles = `
     top: 10px;
   }
 
-  .grid {
-    overflow: auto;
-    position: absolute;
+  #connect-scroll-eg-2 .grid {
     left: 200px;
     top: 62px;
-    right: 0;
-    bottom: 0;
-  }
-  .grid-wrap,
-  .grid-row {
-    width: 3000px;
-  }
-  .grid-row {
-    display: flex;
-  }
-  .grid-row:not(:last-child) {
-    border-bottom: 1px solid #eaeaea;
   }
 `

@@ -1,7 +1,7 @@
 import NativeScrollAugment from '../../../dist'
 
 import { generateData } from './generateData'
-import { styles } from './styles'
+import { styles } from '../sharedStyles'
 import { injectStyles } from '../utils'
 
 export const loadKineticScroll = ($root) => {
@@ -27,7 +27,7 @@ export const startKineticScroll = ($parent, scrollAreas) => {
   $parent.classList.add('parent')
   $scrollArea1.classList.add('area')
   injectStyles({
-    uid: 'KINETIC_STYLES',
+    uid: 'SHARED_STYLES',
     styles
   })
 

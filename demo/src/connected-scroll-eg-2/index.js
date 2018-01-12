@@ -1,6 +1,7 @@
 import NativeScrollAugment from '../../../dist'
 
 import { generateData } from './generateData'
+import { styles as sharedStyles } from '../sharedStyles'
 import { styles } from './styles'
 import { injectStyles } from '../utils'
 
@@ -41,6 +42,11 @@ export const startConnectScrollEg2 = ($parent, scrollAreas) => {
   $scrollArea1.classList.add('sidebar')
   $scrollArea2.classList.add('header')
   $scrollArea3.classList.add('grid')
+  
+  injectStyles({
+    uid: 'SHARED_STYLES',
+    styles: sharedStyles
+  })
   injectStyles({
     uid: 'CONNECTED_EG2_STYLES',
     styles: styles

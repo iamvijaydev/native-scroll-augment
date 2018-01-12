@@ -1,10 +1,10 @@
 import NativeScrollAugment from '../../dist'
 
-import {
-  styles
-} from './styles'
-import { injectStyles } from './utils'
-
+import { styles } from './styles'
+import { 
+  injectStyles,
+  findMatchingNode
+} from './utils'
 
 const $container = document.querySelector('#container')
 const $menu = document.querySelector('#menu')
@@ -14,20 +14,6 @@ const $exposedMethods = document.querySelector('#exposed-methods')
 let currentInst = {
   destroy: () => {}
 };
-
-const findMatchingNode = (target, node) => {
-
-  // escape hatch
-  if (!node || target.tagName.toUpperCase() === 'BODY') {
-    return false;
-  }
-
-  if (target.tagName.toUpperCase() === node) {
-    return target;
-  }
-
-  return findMatchingNode(target.parentElement, node)
-}
 
 const processClick = (id) => {
   switch(id) {

@@ -1,6 +1,7 @@
 import NativeScrollAugment from '../../../dist'
 
 import { generateData } from './generateData'
+import { styles as sharedStyles } from '../sharedStyles'
 import { styles } from './styles'
 import { injectStyles } from '../utils'
 
@@ -26,11 +27,15 @@ export const startExposedMethodsScroll = ($parent, scrollAreas) => {
 
   $parent.classList.add('parent')
   $scrollArea1.classList.add('grid')
+
   injectStyles({
-    uid: 'EXPOSED_METHODS_STYLES',
+    uid: 'SHARED_STYLES',
+    styles: sharedStyles
+  })
+  injectStyles({
+    uid: 'EXPOSED_METHOD_STYLES',
     styles
   })
-
 
   $scrollArea1.appendChild(generateData());
 

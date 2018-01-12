@@ -11,3 +11,17 @@ export const injectStyles = ({ uid, styles }) => {
     document.head.appendChild(style)
   }
 }
+
+export const findMatchingNode = (target, node) => {
+
+  // escape hatch
+  if (!node || target.tagName.toUpperCase() === 'BODY') {
+    return false;
+  }
+
+  if (target.tagName.toUpperCase() === node) {
+    return target;
+  }
+
+  return findMatchingNode(target.parentElement, node)
+}
