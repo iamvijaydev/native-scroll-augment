@@ -38,20 +38,27 @@ var NativeScrollAugment = /** @class */ (function () {
         this.isAutoScrolling = false;
         this.settings = lodash_1.extend({}, defaultOptions_1.defaultOptions, props.options);
     }
+    NativeScrollAugment.prototype._bindMethods = function () {
+        this._tap = this._tap.bind(this);
+        this._swipe = this._swipe.bind(this);
+        this._release = this._release.bind(this);
+        this._onScroll = this._onScroll.bind(this);
+        this._setActiveNode = this._setActiveNode.bind(this);
+        this._autoScroll = this._autoScroll.bind(this);
+    };
+    NativeScrollAugment.prototype.init = function () {
+        this._bindMethods();
+        this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
+        this.$parent.addEventListener('scroll', this._onScroll, true);
+        if (!this.hasTouch && this.settings.enableKinetics) {
+            this.$parent.addEventListener('mousedown', this._tap, true);
+        }
+    };
     NativeScrollAugment.prototype.destroy = function () {
         this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
         this.$parent.addEventListener('scroll', this._onScroll, true);
         if (!this.hasTouch && this.settings.enableKinetics) {
             this.$parent.removeEventListener('mousedown', this._tap);
-            this.$parent.removeEventListener('mousemove', this._swipe);
-            this.$parent.removeEventListener('mouseup', this._release);
-        }
-    };
-    NativeScrollAugment.prototype.init = function () {
-        this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode.bind(this), true);
-        this.$parent.addEventListener('scroll', this._onScroll.bind(this), true);
-        if (!this.hasTouch && this.settings.enableKinetics) {
-            this.$parent.addEventListener('mousedown', this._tap.bind(this), true);
         }
     };
     NativeScrollAugment.prototype.updateOptions = function (options) {
@@ -105,7 +112,7 @@ var NativeScrollAugment = /** @class */ (function () {
         this.lastScrollTop = this.scrollTop;
         this.velocityTop = this.settings.movingAverage * (1000 * delta / (1 + elapsed)) + 0.2 * this.velocityTop;
     };
-    NativeScrollAugment.prototype.scrollTo = function (left, top) {
+    NativeScrollAugment.prototype._scrollTo = function (left, top) {
         var _this = this;
         var correctedLeft = Math.round(left);
         var correctedTop = Math.round(top);
@@ -180,9 +187,9 @@ var NativeScrollAugment = /** @class */ (function () {
         else {
             scrollY = 0;
         }
-        this.scrollTo(this.targetLeft + scrollX, this.targetTop + scrollY);
+        this._scrollTo(this.targetLeft + scrollX, this.targetTop + scrollY);
         if (scrollX !== 0 || scrollY !== 0) {
-            this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
+            this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
         }
         else {
             this.isAutoScrolling = false;
@@ -198,7 +205,7 @@ var NativeScrollAugment = /** @class */ (function () {
             this.amplitudeLeft = amplitudeLeft;
             this.amplitudeTop = amplitudeTop;
             this.isAutoScrolling = true;
-            this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
+            this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
         }
     };
     NativeScrollAugment.prototype._cancelAutoScroll = function () {
@@ -222,8 +229,8 @@ var NativeScrollAugment = /** @class */ (function () {
         this._resetMomentum();
         this.timeStamp = utils_js_1.getTime();
         this._cancelAutoScroll();
-        this.$parent.addEventListener('mousemove', this._swipe.bind(this), true);
-        this.$parent.addEventListener('mouseup', this._release.bind(this), true);
+        this.$parent.addEventListener('mousemove', this._swipe, true);
+        this.$parent.addEventListener('mouseup', this._release, true);
         if (utils_js_1.preventDefaultException(e.target, this.settings.preventDefaultException)) {
             e.preventDefault();
         }
@@ -254,7 +261,7 @@ var NativeScrollAugment = /** @class */ (function () {
             }
             this._leftVelocityTracker();
             this._topVelocityTracker();
-            this.scrollTo(this.scrollLeft + deltaX, this.scrollTop + deltaY);
+            this._scrollTo(this.scrollLeft + deltaX, this.scrollTop + deltaY);
             if (this.resetMomentumTracker !== -1) {
                 clearTimeout(this.resetMomentumTracker);
                 this.resetMomentumTracker = -1;

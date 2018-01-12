@@ -28,14 +28,15 @@ export default class NativeScrollAugment {
         scrollsAreas: HTMLElement[];
         options?: ISettingsOptional;
     });
-    destroy(): void;
+    _bindMethods(): void;
     init(): void;
+    destroy(): void;
     updateOptions(options: ISettingsOptional): void;
     replaceScrollAreas(scrollsAreas: HTMLElement[], left?: number, top?: number): void;
     _setActiveNode(e: Event): void;
     _leftVelocityTracker(): void;
     _topVelocityTracker(): void;
-    scrollTo(left: number, top: number): void;
+    _scrollTo(left: number, top: number): void;
     _onScroll(e: Event): void;
     _autoScroll(): void;
     _triggerAutoScroll(targetLeft: number, targetTop: number, amplitudeLeft: number, amplitudeTop: number): void;
