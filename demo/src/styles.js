@@ -28,31 +28,50 @@ export const styles = `
     background-color: #fff;
     position: relative;
     z-index: 2;
-    overflow-x: hidden;
     overflow-y: auto;
+    overflow-x: visible;
   }
-  #menu div {
+  #menu > div {
+    border-bottom: 1px solid #eaeaea;
+    cursor: pointer;
+  }
+  #menu span {
     padding: 1.5rem;
     font-size: 1.5rem;
-    border-bottom: 1px solid #eaeaea;
-    color: #a0a0a0;
-    cursor: pointer;
-    position: relative;
+    color: #6f6f6f;
+    display: block;
+    transition: all 0.2s ease;
+  }
+  #menu .active span {
+    color: #fff;
+    background: #0a8ebd;
     font-weight: 500;
   }
-  #menu .active {
-    color: #12779c;
+
+  #menu .btn-wrap {
+    padding: 1rem;
   }
-  #menu .active:after {
-    content: ' ';
-    position: absolute;
-    right: -10px;
-    top: 4px;
-    width: 0; 
-    height: 0; 
-    border-top: 2rem solid transparent;
-    border-bottom: 2rem solid transparent;
-    border-left: 2rem solid #fff;
+
+  #menu button {
+    background-color: #c1c1c1;
+    padding: 1rem 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 3px;
+    color: #4c4c4c;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border: none;
+    outline-offset: -3px;
+    outline-style: dashed;
+    outline-width: 1px;
+    outline-color: #eaeaea;
+  }
+  #menu button:disabled {
+    background-color: #eaeaea;
+    outline-color: #ffffff;
+    color: #9a9a9a;
+    cursor: not-allowed;
   }
 
   #container {

@@ -86,63 +86,66 @@ const chooseMenuHandler = (event) => {
 
 $menu.addEventListener('click', chooseMenuHandler, false)
 
+const switchToExposedMethod = (id) => {
+  switch (id) {
+    case 'scroll-to-start':
+      currentInst.scrollToStart();
+      return;
+
+    case 'scroll-to-start-left':
+      currentInst.scrollToStartLeft();
+      return;
+
+    case 'scroll-to-start-top':
+      currentInst.scrollToStartTop();
+      return;
+
+    case 'scroll-to-end':
+      currentInst.scrollToEnd();
+      return;
+
+    case 'scroll-to-end-left':
+      currentInst.scrollToEndLeft();
+      return;
+
+    case 'scroll-to-end-top':
+      currentInst.scrollToEndTop();
+      return;
+
+    case 'scroll-to-start1':
+      currentInst.scrollToStart();
+      return;
+
+    case 'scroll-to-start2':
+      currentInst.scrollToStart();
+      return;
+
+    default:
+      return;
+  }
+}
+
 const processExposedMethodsHandler = (event) => {
-  event.stopPropagation();
+  event.stopPropagation()
+
+  const $found = findMatchingNode(event.target, 'DIV')
 
   // if not loaded
   if ($currentMenu.id !== 'load-exposed-methods') {
     $currentMenu.classList.remove('active')
     $currentMenu = document.querySelector('#load-exposed-methods')
-    $currentMenu.classList.remove('active')
+    $currentMenu.classList.add('active')
 
     processClick('load-exposed-methods')
       .then(inst => {
         if (typeof inst !== typeof true) {
           currentInst = inst;
+          switchToExposedMethod($found.id)
         }
       })
+  } else {
+    switchToExposedMethod($found.id)
   }
-  
-  const $found = findMatchingNode(event.target, 'DIV')
-
-  setTimeout(() => {
-    switch ($found.id) {
-      case 'scroll-to-start':
-        currentInst.scrollToStart();
-        return;
-        
-      case 'scroll-to-start-left':
-        currentInst.scrollToStartLeft();
-        return;
-
-      case 'scroll-to-start-top':
-        currentInst.scrollToStartTop();
-        return;
-
-      case 'scroll-to-end':
-        currentInst.scrollToEnd();
-        return;
-
-      case 'scroll-to-end-left':
-        currentInst.scrollToEndLeft();
-        return;
-
-      case 'scroll-to-end-top':
-        currentInst.scrollToEndTop();
-        return;
-
-      case 'scroll-to-start1':
-        currentInst.scrollToStart();
-        return;
-
-      case 'scroll-to-start2':
-        currentInst.scrollToStart();
-        return;
-
-      default:
-        break;
-    }
-  }, 100)
 }
 
 $exposedMethods.addEventListener('click', processExposedMethodsHandler, false)
