@@ -28,6 +28,8 @@ export const styles = `
     background-color: #fff;
     position: relative;
     z-index: 2;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   #menu div {
     padding: 1.5rem;

@@ -1,4 +1,4 @@
-export const exposedData = () => {
+export const generateData = () => {
   const yCount = 20;
   const xCount = 30;
   const xGrid = document.createElement('div')

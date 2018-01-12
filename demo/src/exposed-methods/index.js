@@ -1,6 +1,6 @@
 import NativeScrollAugment from '../../../dist'
 
-import { exposedData } from './generateData'
+import { generateData } from './generateData'
 import { styles } from './styles'
 import { injectStyles } from '../utils'
 
@@ -9,7 +9,7 @@ export const loadExposedMethodsScroll = ($root) => {
     const $parent = document.createElement('div')
     const $scrollArea1 = document.createElement('div')
 
-    $parent.id = "connect-scroll-eg-1"
+    $parent.id = "exposed-methods-scroll-eg-1"
     $scrollArea1.id = "scroll-area-1"
 
     $parent.appendChild($scrollArea1)
@@ -32,7 +32,7 @@ export const startExposedMethodsScroll = ($parent, scrollAreas) => {
   })
 
 
-  $scrollArea1.appendChild(exposedData());
+  $scrollArea1.appendChild(generateData());
 
   const nsa = new NativeScrollAugment({
     parent: $parent,

@@ -1,18 +1,5 @@
 import NativeScrollAugment from '../../dist'
-import {
-  loadConnectScrollEg1,
-  startConnectScrollEg1,
-  loadConnectScrollEg2,
-  startConnectScrollEg2
-} from './connected-scroll'
-import {
-  loadKineticScroll,
-  startKineticScroll
-} from './kinetic-scroll'
-import {
-  loadExposedMethodsScroll,
-  startExposedMethodsScroll
-} from './exposed-methods'
+
 import {
   styles
 } from './styles'
@@ -45,39 +32,47 @@ const findMatchingNode = (target, node) => {
 const processClick = (id) => {
   switch(id) {
     case 'load-connect-scroll-eg-1':
-      currentInst.destroy();
-      return loadConnectScrollEg1($container)
-        .then(({ $parent, scrollAreas }) => {
-          currentInst = startConnectScrollEg1($parent, scrollAreas)
+      return import('./connected-scroll-eg-1')
+        .then(({ loadConnectScrollEg1, startConnectScrollEg1 }) => {
+          currentInst.destroy();
 
-          return true
+          return loadConnectScrollEg1($container)
+            .then(({ $parent, scrollAreas }) => {
+              return startConnectScrollEg1($parent, scrollAreas)
+            })
         })
 
     case 'load-connect-scroll-eg-2':
-      currentInst.destroy();
-      return loadConnectScrollEg2($container)
-        .then(({ $parent, scrollAreas }) => {
-          currentInst = startConnectScrollEg2($parent, scrollAreas)
+      return import('./connected-scroll-eg-2')
+        .then(({ loadConnectScrollEg2, startConnectScrollEg2 }) => {
+          currentInst.destroy();
 
-          return true
+          return loadConnectScrollEg2($container)
+            .then(({ $parent, scrollAreas }) => {
+              return startConnectScrollEg2($parent, scrollAreas)
+            })
         })
 
     case 'load-kinetic-scroll':
-      currentInst.destroy();
-      return loadKineticScroll($container)
-        .then(({ $parent, scrollAreas }) => {
-          currentInst = startKineticScroll($parent, scrollAreas)
+      return import('./kinetic-scroll')
+        .then(({ loadKineticScroll, startKineticScroll }) => {
+          currentInst.destroy();
 
-          return true
+          return loadKineticScroll($container)
+            .then(({ $parent, scrollAreas }) => {
+              return startKineticScroll($parent, scrollAreas)
+            })
         })
 
     case 'load-exposed-methods':
-      currentInst.destroy();
-      return loadExposedMethodsScroll($container)
-        .then(({ $parent, scrollAreas }) => {
-          currentInst = startExposedMethodsScroll($parent, scrollAreas)
+      return import('./exposed-methods')
+        .then(({ loadExposedMethodsScroll, startExposedMethodsScroll }) => {
+          currentInst.destroy();
 
-          return true
+          return loadExposedMethodsScroll($container)
+            .then(({ $parent, scrollAreas }) => {
+              return startExposedMethodsScroll($parent, scrollAreas)
+            })
         })
 
     default:
@@ -94,7 +89,12 @@ const chooseMenuHandler = (event) => {
     $currentMenu.classList.remove('active');
     $currentMenu = $found;
 
-    processClick($found.id);
+    processClick($found.id)
+      .then(inst => {
+        if (typeof inst !== typeof true) {
+          currentInst = inst;
+        }
+      })
   }
 }
 
@@ -110,12 +110,16 @@ const processExposedMethodsHandler = (event) => {
     $currentMenu.classList.remove('active')
 
     processClick('load-exposed-methods')
+      .then(inst => {
+        if (typeof inst !== typeof true) {
+          currentInst = inst;
+        }
+      })
   }
   
   const $found = findMatchingNode(event.target, 'DIV')
 
   setTimeout(() => {
-    console.log($found.id)
     switch ($found.id) {
       case 'scroll-to-start':
         currentInst.scrollToStart();
@@ -152,7 +156,7 @@ const processExposedMethodsHandler = (event) => {
       default:
         break;
     }
-  }, 10)
+  }, 100)
 }
 
 $exposedMethods.addEventListener('click', processExposedMethodsHandler, false)
