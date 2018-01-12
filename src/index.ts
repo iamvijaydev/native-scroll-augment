@@ -54,16 +54,16 @@ export default class NativeScrollAugment {
     options?: ISettingsOptional;
   }) {
     if (!isElement(props.parent)) {
-        throw new Error(`First argument should be an element. Provided ${typeof props.parent}`);
+      throw new Error(`First argument should be an element. Provided ${typeof props.parent}`);
     }
     if (!isArray(props.scrollsAreas)) {
       throw new Error(`Second argument should be an array. Provided ${typeof props.scrollsAreas}`);
     }
     props.scrollsAreas.forEach(($node, index) => {
-        if (!isElement($node)) {
-          throw new Error(`Entries in second argument should be an element.
+      if (!isElement($node)) {
+        throw new Error(`Entries in second argument should be an element.
             Provided ${typeof $node} at index ${index}`);
-        }
+      }
     });
 
     this.hasTouch = 'ontouchstart' in window;
@@ -97,23 +97,32 @@ export default class NativeScrollAugment {
     );
   }
 
+  public _bindMethods() {
+    this._tap = this._tap.bind(this)
+    this._swipe = this._swipe.bind(this)
+    this._release = this._release.bind(this)
+    this._onScroll = this._onScroll.bind(this)
+    this._setActiveNode = this._setActiveNode.bind(this)
+    this._autoScroll = this._autoScroll.bind(this)
+  }
+
+  public init() {
+    this._bindMethods()
+
+    this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
+    this.$parent.addEventListener('scroll', this._onScroll, true);
+
+    if (!this.hasTouch && this.settings.enableKinetics) {
+      this.$parent.addEventListener('mousedown', this._tap, true);
+    }
+  }
+
   public destroy() {
     this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
     this.$parent.addEventListener('scroll', this._onScroll, true);
 
     if (!this.hasTouch && this.settings.enableKinetics) {
       this.$parent.removeEventListener('mousedown', this._tap);
-      this.$parent.removeEventListener('mousemove', this._swipe);
-      this.$parent.removeEventListener('mouseup', this._release);
-    }
-  }
-
-  public init() {
-    this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode.bind(this), true);
-    this.$parent.addEventListener('scroll', this._onScroll.bind(this), true);
-
-    if (!this.hasTouch && this.settings.enableKinetics) {
-      this.$parent.addEventListener('mousedown', this._tap.bind(this), true);
     }
   }
 
@@ -190,7 +199,7 @@ export default class NativeScrollAugment {
     this.velocityTop = this.settings.movingAverage * (1000 * delta / (1 + elapsed)) + 0.2 * this.velocityTop;
   }
 
-  public scrollTo(left: number, top: number) {
+  public _scrollTo(left: number, top: number) {
     const correctedLeft = Math.round(left);
     const correctedTop = Math.round(top);
 
@@ -270,10 +279,10 @@ export default class NativeScrollAugment {
       scrollY = 0;
     }
 
-    this.scrollTo(this.targetLeft + scrollX, this.targetTop + scrollY);
+    this._scrollTo(this.targetLeft + scrollX, this.targetTop + scrollY);
 
     if (scrollX !== 0 || scrollY !== 0) {
-      this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
     } else {
       this.isAutoScrolling = false;
       this.autoScrollTracker = -1;
@@ -296,7 +305,7 @@ export default class NativeScrollAugment {
       this.amplitudeTop = amplitudeTop;
 
       this.isAutoScrolling = true;
-      this.autoScrollTracker = requestAnimationFrame(this._autoScroll.bind(this));
+      this.autoScrollTracker = requestAnimationFrame(this._autoScroll);
     }
   }
 
@@ -329,8 +338,8 @@ export default class NativeScrollAugment {
 
     this._cancelAutoScroll();
 
-    this.$parent.addEventListener('mousemove', this._swipe.bind(this), true);
-    this.$parent.addEventListener('mouseup', this._release.bind(this), true);
+    this.$parent.addEventListener('mousemove', this._swipe, true);
+    this.$parent.addEventListener('mouseup', this._release, true);
 
     if (preventDefaultException((e.target as HTMLElement), this.settings.preventDefaultException)) {
       e.preventDefault();
@@ -365,7 +374,7 @@ export default class NativeScrollAugment {
       this._leftVelocityTracker();
       this._topVelocityTracker();
 
-      this.scrollTo(this.scrollLeft + deltaX, this.scrollTop + deltaY);
+      this._scrollTo(this.scrollLeft + deltaX, this.scrollTop + deltaY);
 
       if (this.resetMomentumTracker !== -1) {
         clearTimeout(this.resetMomentumTracker);
