@@ -47,6 +47,12 @@ export const styles = `
     background: #0a8ebd;
     font-weight: 500;
   }
+  #menu .submenu {
+    display: none;
+  }
+  #menu .active .submenu {
+    display: block;
+  }
 
   #menu .btn-wrap {
     padding: 1rem;
