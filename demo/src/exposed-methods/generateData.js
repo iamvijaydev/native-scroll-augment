@@ -27,3 +27,7 @@ export const generateData = () => {
 
   return xGrid;
 }
+
+export const generateMethodsButtons = () => {
+
+}

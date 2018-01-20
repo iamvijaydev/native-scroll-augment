@@ -42,7 +42,7 @@ export const startExposedMethodsScroll = ($parent, scrollAreas) => {
   const nsa = new NativeScrollAugment({
     parent: $parent,
     scrollsAreas: [$scrollArea1],
-    options: { enableKinetics: true, movingAverage: 0.2 }
+    options: { enableKinetics: true, movingAverage: 0.05 }
   })
 
   nsa.init();

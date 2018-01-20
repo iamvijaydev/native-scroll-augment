@@ -8,7 +8,6 @@ export const styles = `
     margin: 0;
     height: 100%;
     width: 100%;
-    background-color: #0ca9e2;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Droid Sans", "Helvetica Neue", sans-serif;
   }
 
@@ -23,67 +22,41 @@ export const styles = `
     bottom: 0;
   }
 
-  #menu {
-    flex-basis: 20rem;
-    background-color: #fff;
-    position: relative;
-    z-index: 2;
-    overflow-y: auto;
-    overflow-x: visible;
-  }
-  #menu > div {
-    border-bottom: 1px solid #eaeaea;
-    cursor: pointer;
-  }
-  #menu span {
-    padding: 1.5rem;
-    font-size: 1.5rem;
-    color: #6f6f6f;
-    display: block;
-    transition: all 0.2s ease;
-  }
-  #menu .active span {
-    color: #fff;
-    background: #0a8ebd;
-    font-weight: 500;
-  }
-  #menu .submenu {
-    display: none;
-  }
-  #menu .active .submenu {
-    display: block;
-  }
-
   #menu .btn-wrap {
-    padding: 1rem;
+    padding: 1rem 1.2rem;
   }
 
   #menu button {
-    background-color: #c1c1c1;
+    position: relative;
+    background-color: #FF502B;
     padding: 1rem 0;
     width: 100%;
     box-sizing: border-box;
     border-radius: 3px;
-    color: #4c4c4c;
-    font-size: 1.5rem;
+    color: #ffd9c5;
+    font-size: 1.2rem;
     cursor: pointer;
     border: none;
     outline-offset: -3px;
     outline-style: dashed;
     outline-width: 1px;
-    outline-color: #eaeaea;
+    outline-color: #ff6b4d;
+    box-shadow: 0 2px 0 #af3b23;
+    text-transform: uppercase;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Droid Sans", "Helvetica Neue", sans-serif;
   }
-  #menu button:disabled {
-    background-color: #eaeaea;
-    outline-color: #ffffff;
-    color: #9a9a9a;
-    cursor: not-allowed;
+  #menu button:active {
+    top: 2px;
+    outline-color: #ff8e77;
+    box-shadow: 0 0 0 #af3b23;
+    color: #fff7f3;
+    background-color: #d84627;
   }
 
   #container {
     flex-grow: 1;
     position: relative;
-    background-color: #0ca9e2;
+    background-color: #2683FF
   }
 
   .parent {
