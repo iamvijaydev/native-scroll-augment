@@ -19,7 +19,7 @@ export const findMatchingNode = (target, node) => {
     return false;
   }
 
-  if (target.tagName.toUpperCase() === node) {
+  if (target.tagName.toUpperCase() === node.toUpperCase()) {
     return target;
   }
 
