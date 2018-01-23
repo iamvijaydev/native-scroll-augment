@@ -1,7 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-export const Aside = styled.aside`
+const Aside = styled.aside`
   flex-basis: 20rem;
   background-color: #fff;
   position: relative;
@@ -9,3 +8,5 @@ export const Aside = styled.aside`
   overflow-y: auto;
   overflow-x: visible;
 `
+
+export default Aside;

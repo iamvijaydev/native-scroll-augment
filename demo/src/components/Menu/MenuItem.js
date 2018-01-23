@@ -1,9 +1,8 @@
-import React from 'react';
 import styled from 'styled-components';
 
 const MenuItem = styled.div`
   border-bottom: 1px solid #eaeaea;
-  background: ${({ isActive }) => isActive ? 'default' : 'pointer'};
+  cursor: ${({ isActive }) => isActive ? 'dfault' : 'pointer'};
 `
 
 const MenuName = styled.span`
@@ -19,4 +18,4 @@ const MenuName = styled.span`
 
 MenuItem.Name = MenuName;
 
-export const MenuItem
+export default MenuItem

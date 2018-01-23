@@ -1,7 +1,6 @@
-import React from 'react'
 import styled from 'styled-components'
 
-export const App = styled.div`
+const App = styled.div`
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -11,3 +10,5 @@ export const App = styled.div`
   top: 0;
   bottom: 0;
 `
+
+export default App

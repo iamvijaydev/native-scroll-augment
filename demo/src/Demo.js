@@ -1,15 +1,18 @@
 import React from 'react'
 
-import { App } from './components/App'
-import { Menu } from './components/Menu'
-import { Container } from './components/Container'
+import App from './components/App'
+import Menu from './components/Menu'
+import Container from './components/Container'
 
-export class Demo extends React.Component {
-  state: {
-    menus: [{
-      id: 'read-me',
-      name: 'Read Me'
-    }, {
+export default class Demo extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      menus: [{
+        id: 'read-me',
+        name: 'Read Me'
+      }, {
         id: 'load-connect-scroll-eg-1',
         name: 'Connected Scroll eg. 1'
       }, {
@@ -26,6 +29,9 @@ export class Demo extends React.Component {
         name: 'Exposed Methods eg. 2'
       }],
       selectedMenu: 0
+    }
+
+    this.onMenuChange = this.onMenuChange.bind(this)
   }
 
   onMenuChange(selectedMenu) {
@@ -34,7 +40,7 @@ export class Demo extends React.Component {
 
   render() {
     const {
-      mens,
+      menus,
       selectedMenu
     } = this.state;
 
