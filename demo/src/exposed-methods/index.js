@@ -1,51 +1,65 @@
 import NativeScrollAugment from '../../../dist'
 
 import { generateData } from './generateData'
-import { actionWrapperComponent } from './actionGenerators'
+import {
+  eg1ActionWrapperComponent,
+  eg2ActionWrapperComponent
+} from './actionGenerators'
 import { styles as sharedStyles } from '../sharedStyles'
 import { styles } from './styles'
 import { injectStyles } from '../utils'
 
-export const loadExposedMethodsScroll = ($root) => {
+export const loadExposedMethodsScroll = ($root, currentInst) => {
   return new Promise((resolve) => {
-    const $parent = document.createElement('div')
-    const $scrollArea1 = document.createElement('div')
+    let $parent;
+    let $scrollArea1;
 
-    $parent.id = "exposed-methods-scroll-eg-1"
-    $scrollArea1.id = "scroll-area-1"
+    if (currentInst) {
+      $parent = document.querySelector('#exposed-methods-scroll');
+      $scrollArea1 = document.querySelector('#scroll-area-1');
+    } else {
+      $parent = document.createElement('div');
+      $scrollArea1 = document.createElement('div');
 
-    $parent.appendChild($scrollArea1)
+      $parent.id = 'exposed-methods-scroll';
+      $scrollArea1.id = 'scroll-area-1';
 
-    $root.innerHTML = ''
-    $root.appendChild($parent)
+      $parent.appendChild($scrollArea1);
+
+      $root.innerHTML = '';
+      $root.appendChild($parent);
+    }
 
     resolve({ $parent, scrollAreas: [$scrollArea1] })
   })
 }
 
-export const startExposedMethodsScroll = ($parent, scrollAreas) => {
-  const $scrollArea1 = scrollAreas[0]
-
-  $parent.classList.add('parent')
-  $scrollArea1.classList.add('grid')
-
-  injectStyles({
-    uid: 'SHARED_STYLES',
-    styles: sharedStyles
-  })
-  injectStyles({
-    uid: 'EXPOSED_METHOD_STYLES',
-    styles
-  })
-
-  $scrollArea1.appendChild(generateData());
-
-  const nsa = new NativeScrollAugment({
+export const startExposedMethodsScroll = ($parent, scrollAreas, type, currentInst) => {
+  const $scrollArea1 = scrollAreas[0];
+  const nsa = currentInst ? currentInst : new NativeScrollAugment({
     parent: $parent,
     scrollsAreas: [$scrollArea1],
     options: { enableKinetics: true, movingAverage: 0.05 }
   })
-  const data = [{
+
+  if (!currentInst) {
+    $parent.classList.add('parent')
+    $scrollArea1.classList.add('grid')
+
+    injectStyles({
+      uid: 'SHARED_STYLES',
+      styles: sharedStyles
+    })
+    injectStyles({
+      uid: 'EXPOSED_METHOD_STYLES',
+      styles
+    })
+
+    $scrollArea1.appendChild(generateData());
+    nsa.init();
+  }
+
+  const eg1Data = [{
     id: 'scroll-to-start',
     title: 'Scroll to start',
     isHidden: true,
@@ -88,9 +102,21 @@ export const startExposedMethodsScroll = ($parent, scrollAreas) => {
     hide: ['scroll-to-end-top'],
     show: ['scroll-to-start-top']
   }]
+  const eg2Data = [{
+    id: 'scroll-to-start',
+    title: 'Scroll to start',
+    isHidden: true,
+    callback: nsa.scrollToStart.bind(nsa),
+  }]
+  let actionInstance;
 
-  $parent.parentNode.appendChild(actionWrapperComponent(data))
+  if (type === 'EG_1') {
+    actionInstance = eg1ActionWrapperComponent(eg1Data)
+  } else if (type === 'EG_2') {
+    actionInstance = eg2ActionWrapperComponent(eg2Data)
+  }
 
-  nsa.init();
+  $parent.parentNode.appendChild(actionInstance)
+
   return nsa;
 }

@@ -1,9 +1,9 @@
 export const styles = `
-  #exposed-methods-scroll-eg-1 {
+  #exposed-methods-scroll {
     margin: 10rem;
   }
 
-  #exposed-methods-scroll-eg-1 .grid {
+  #exposed-methods-scroll .grid {
     left: 0;
     top: 0;
   }

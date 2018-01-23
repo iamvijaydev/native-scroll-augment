@@ -20,7 +20,7 @@ const actionComponent = (actionData) => {
   return $action;
 }
 
-export const actionWrapperComponent = (actionsData) => {
+export const eg1ActionWrapperComponent = (actionsData) => {
   const $actions = document.createElement('div');
   const ACTIONS_REF = {};
 
@@ -50,6 +50,36 @@ export const actionWrapperComponent = (actionsData) => {
     if (matched) {
       matched.callback();
       toggleVisibility(matched);
+    }
+  }
+
+  actionsData.forEach(actionData => {
+    const $action = actionComponent(actionData)
+
+    ACTIONS_REF[actionData.id] = $action;
+    $actions.appendChild($action);
+  });
+
+  $actions.classList.add('actions');
+  $actions.addEventListener('click', triggerCallback, false)
+
+  return $actions;
+}
+
+export const eg2ActionWrapperComponent = (actionsData) => {
+  const $actions = document.createElement('div');
+  const ACTIONS_REF = {};
+
+  const triggerCallback = (e) => {
+    const $found = findMatchingNode(e.target, 'button');
+    let matched;
+
+    if ($found) {
+      matched = actionsData.find(action => action.id === $found.id);
+    }
+
+    if (matched) {
+      matched.callback();
     }
   }
 

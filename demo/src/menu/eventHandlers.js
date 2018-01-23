@@ -3,8 +3,20 @@ import { findMatchingNode } from '../utils'
 let $container;
 let $currentMenu;
 let currentInst = {
+  $parent: {},
   destroy: () => { }
 };
+
+const loadExposedMethods = (type) => {
+  return import('../exposed-methods')
+    .then(({ loadExposedMethodsScroll, startExposedMethodsScroll }) => {
+      const hasInst = currentInst.$parent.id === 'exposed-methods-scroll' ? currentInst : undefined;
+      return loadExposedMethodsScroll($container, hasInst)
+        .then(({ $parent, scrollAreas }) => {
+          return startExposedMethodsScroll($parent, scrollAreas, type, hasInst)
+        })
+    })
+}
 
 const processClick = (id) => {
   switch (id) {
@@ -42,16 +54,10 @@ const processClick = (id) => {
         })
 
     case 'load-exposed-methods-eg-1':
-    case 'load-exposed-methods-eg-2':
-      return import('../exposed-methods')
-        .then(({ loadExposedMethodsScroll, startExposedMethodsScroll }) => {
-          currentInst.destroy();
+      return loadExposedMethods('EG_1')
 
-          return loadExposedMethodsScroll($container)
-            .then(({ $parent, scrollAreas }) => {
-              return startExposedMethodsScroll($parent, scrollAreas)
-            })
-        })
+    case 'load-exposed-methods-eg-2':
+      return loadExposedMethods('EG_2')
 
     default:
       return new Promise(resolve => resolve(true))
