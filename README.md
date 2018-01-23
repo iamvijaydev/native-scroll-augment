@@ -10,8 +10,8 @@ Connect two or more scrollable areas. Meaning when we scroll one area, others sc
 ### Kinetic scrolling
 Kinetic scrolling with a tap, swipe, and flick features on a non-touch device. This feature can be enabled for devices that do not support smooth scrolling.
 
-### Helper functions
-Helper functions to smooth scroll a scrollable area to a specific scroll position, to scroll start, or to scroll end. Also, a helper function to smooth scroll a scrollable area by a certain value.
+### Exposed methods
+Exposed methods to smooth scroll a scrollable area to a specific scroll position, to scroll start, or to scroll end. Also, a helper function to smooth scroll a scrollable area by a certain value.
 
 ## Installation (Not published yet)
 ```shell
@@ -32,3 +32,8 @@ const nsa = new NativeScrollAugment($parent, [$scrollArea], options);
 // initialize the instance
 nsa.init()
 ```
+
+## TODO
+* Implement update options
+* Implement replace scroll areas
+* Tests and coverage
