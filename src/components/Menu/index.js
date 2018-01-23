@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Aside } from './Aside'
-import { MenuItem } from './Aside'
+import Aside from './Aside'
+import MenuItem from './MenuItem'
 
-export const Menu = ({
+export default ({
   menus,
   selectedMenu,
   onMenuChange
