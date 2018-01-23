@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { App } from './components/App'
 import { Menu } from './components/Menu'
 import { Container } from './components/Container'
 
@@ -13,7 +14,7 @@ export class Demo extends React.Component {
         name: 'Connected Scroll eg. 1'
       }, {
         id: 'load-connect-scroll-eg-2',
-        name: 'Connected Scroll eg. 2
+        name: 'Connected Scroll eg. 2'
       }, {
         id: 'load-kinetic-scroll',
         name: 'Kinetic Scroll'
@@ -27,7 +28,7 @@ export class Demo extends React.Component {
       selectedMenu: 0
   }
 
-  onMenuChange = (selectedMenu) => {
+  onMenuChange(selectedMenu) {
     this.setState({ selectedMenu })
   }
 
@@ -38,10 +39,10 @@ export class Demo extends React.Component {
     } = this.state;
 
     return (
-      <span>
+      <App>
         <Menu menus={menus} selectedMenu={selectedMenu} onMenuChange={this.onMenuChange} />
         <Container menus={menus} selectedMenu={selectedMenu} />
-      </span>
+      </App>
     )
   }
 }

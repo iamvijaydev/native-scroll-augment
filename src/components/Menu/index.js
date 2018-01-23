@@ -1,25 +1,30 @@
 import React from 'react'
 
+import { Aside } from './Aside'
+import { MenuItem } from './Aside'
+
 export const Menu = ({
   menus,
   selectedMenu,
   onMenuChange
 }) => {
   return (
-    <aside className="menu">
-    {
-      menus.map(({ id, name }, index) => {
-        return (
-          <div
-          key={id}
-          className={`menuitem ${index === selectedMenu ? 'menuitem--active' : ''}`}
-          onClick={() => onMenuChange(index)}
-          >
-            <span className="menuitem__name">{name}</span>
-          </div>
-        )
-      })
-    }
-    </aside>
+    <Aside>
+      {
+        menus.map(({ id, name }, index) => {
+          return (
+            <MenuItem
+              key={id}
+              isActive={index === selectedMenu}
+              onClick={() => onMenuChange(index)}
+            >
+              <MenuItem.Name isActive={index === selectedMenu}>
+                {name}
+              </MenuItem.Name>
+            </MenuItem>
+          )
+        })
+      }
+    </Aside> 
   )
 }
