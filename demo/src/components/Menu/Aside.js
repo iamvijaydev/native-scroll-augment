@@ -1,7 +1,7 @@
 import React from 'react';
-import { aside } from 'styled-components';
+import styled from 'styled-components';
 
-export const Aside = aside`
+export const Aside = styled.aside`
   flex-basis: 20rem;
   background-color: #fff;
   position: relative;
