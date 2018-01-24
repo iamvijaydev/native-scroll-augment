@@ -28,7 +28,7 @@ export default class Container extends React.Component {
     return import('../Readme')
   }
   fetchConnectedScrollEg1() {
-    return import('../ConnectedScrollEg1')
+    return import('../ConnectedScroll/Eg1')
   }
 
   fetchComponent(selectedMenu) {
@@ -46,7 +46,7 @@ export default class Container extends React.Component {
 
   loadComponent(selectedMenu) {
     return this.fetchComponent(selectedMenu)
-      .then(ResolvedComponent => ResolvedComponent.default || ResolvedComponent)
+      .then(ResolvedComponent => ResolvedComponent ? ResolvedComponent.default || ResolvedComponent : null)
   }
 
   updateState(Component) {
