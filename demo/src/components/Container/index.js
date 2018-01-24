@@ -1,6 +1,9 @@
 import React from 'react'
 
 import Section from './Section'
+import '../shared/Parent'
+import '../shared/Area'
+import '../shared/Grid'
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -30,6 +33,9 @@ export default class Container extends React.Component {
   fetchConnectedScrollEg1() {
     return import('../ConnectedScroll/Eg1')
   }
+  fetchConnectedScrollEg2() {
+    return import('../ConnectedScroll/Eg2')
+  }
 
   fetchComponent(selectedMenu) {
     switch (selectedMenu) {
@@ -38,6 +44,9 @@ export default class Container extends React.Component {
       
       case 1:
         return this.fetchConnectedScrollEg1();
+
+      case 2:
+        return this.fetchConnectedScrollEg2();
     
       default:
         return new Promise(resolve => resolve());

@@ -31,6 +31,7 @@ export default class ConnectedScrollEg1 extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log(this.nsa)
     this.nsa.destroy()
   }
 
