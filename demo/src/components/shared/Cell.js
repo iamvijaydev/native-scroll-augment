@@ -1,26 +1,6 @@
 import styled from 'styled-components'
-import {
-  Cell,
-  CellActive
-} from './Cell'
 
-const Grid = styled.div`
-  overflow: auto;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-`
-
-const Row = styled.div`
-  width: 3000px;
-  display: flex;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid #eaeaea;
-  }
-`
-
-const Item = Cell.extend`
+export const Cell = styled.div`
   padding: 20px 0;
   height: 25px;
   position: relative;
@@ -40,7 +20,7 @@ const Item = Cell.extend`
   }
 `
 
-const ItemActive = CellActive.extend`
+export const CellActive = Cell.extend`
   background: #eaeaea;
   border-right: 1px solid #d8d8d8;
 
@@ -48,9 +28,3 @@ const ItemActive = CellActive.extend`
     background: #ccc;
   }
 `
-
-Grid.Row = Row
-Grid.Item = Item
-Grid.ItemActive = ItemActive
-
-export default Grid

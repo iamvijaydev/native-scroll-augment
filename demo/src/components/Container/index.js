@@ -1,9 +1,22 @@
 import React from 'react'
 
 import Section from './Section'
-import '../shared/Parent'
-import '../shared/Area'
-import '../shared/Grid'
+
+const fetchComponent = (selectedMenu) => {
+  switch (selectedMenu) {
+    case 0:
+      return import('../Readme')
+
+    case 1:
+      return import('../ConnectedScroll/Eg1')
+
+    case 2:
+      return import('../ConnectedScroll/Eg2')
+
+    default:
+      return new Promise(resolve => resolve());
+  }
+}
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -27,34 +40,8 @@ export default class Container extends React.Component {
     }
   }
 
-  fetchReadMe() {
-    return import('../Readme')
-  }
-  fetchConnectedScrollEg1() {
-    return import('../ConnectedScroll/Eg1')
-  }
-  fetchConnectedScrollEg2() {
-    return import('../ConnectedScroll/Eg2')
-  }
-
-  fetchComponent(selectedMenu) {
-    switch (selectedMenu) {
-      case 0:
-        return this.fetchReadMe();
-      
-      case 1:
-        return this.fetchConnectedScrollEg1();
-
-      case 2:
-        return this.fetchConnectedScrollEg2();
-    
-      default:
-        return new Promise(resolve => resolve());
-    }
-  }
-
   loadComponent(selectedMenu) {
-    return this.fetchComponent(selectedMenu)
+    return fetchComponent(selectedMenu)
       .then(ResolvedComponent => ResolvedComponent ? ResolvedComponent.default || ResolvedComponent : null)
   }
 

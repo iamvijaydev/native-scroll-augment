@@ -1,4 +1,8 @@
 import styled from 'styled-components'
+import {
+  Cell,
+  CellActive
+} from '../shared/Cell'
 
 const Header = styled.div`
   overflow-x: auto;
@@ -19,7 +23,7 @@ const Row = styled.div`
   display: flex;
 `
 
-const Item = styled.div`
+const Item = Cell.extend`
   padding: 10px 0;
   border-bottom: none;
 
