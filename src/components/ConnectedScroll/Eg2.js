@@ -25,8 +25,8 @@ export default class ConnectedScrollEg2 extends React.Component {
       sidebarData.push(yi % 3 === 0 ? <Sidebar.ItemActive key={yi} /> : <Sidebar.Item key={yi} />)
 
       gridRowData = [];
-      xArray.forEach((xe, xi) => {        
-        gridRowData.push(xi % 3 === 0 ? <Grid.ItemActive key={xi} /> : <Grid.Item key={xi} />)
+      xArray.forEach((xe, xi) => {
+        gridRowData.push(yi % 3 === 0 ? <Grid.ItemActive key={xi} /> : <Grid.Item key={xi} />)
 
         if (yi === 0) {
           headerRowData.push(<Header.Item key={xi} />)
@@ -56,10 +56,9 @@ export default class ConnectedScrollEg2 extends React.Component {
   }
 
   componentDidMount() {
-    console.log([this.$scrollArea1, this.$scrollArea2, this.scrollArea3])
     this.nsa = new NativeScrollAugment({
       parent: this.$parent,
-      scrollsAreas: [this.$scrollArea1, this.$scrollArea2],
+      scrollsAreas: [this.$scrollArea1, this.$scrollArea2, this.$scrollArea3],
       options: { enableKinetics: true, movingAverage: 0.2 }
     })
 
@@ -77,13 +76,15 @@ export default class ConnectedScrollEg2 extends React.Component {
       gridData
     } = ConnectedScrollEg2.generateData()
 
-    console.log(Parent)
-
     return (
       <Parent innerRef={(node) => { this.$parent = node }}>
-        <Sidebar innerRef={(node) => { this.$scrollArea1 = node }}>{sidebarData}</Sidebar>
+        <Sidebar innerRef={(node) => { this.$scrollArea1 = node }}>
+          <Sidebar.List>
+            {sidebarData}
+          </Sidebar.List>
+        </Sidebar>
         <Header innerRef={(node) => { this.$scrollArea2 = node }}>{headerData}</Header>
-        {/* <GridExd innerRef={(node) => { this.$scrollArea3 = node }}>{gridData}</GridExd> */}
+        <GridExd innerRef={(node) => { this.$scrollArea3 = node }}>{gridData}</GridExd>
       </Parent>
     )
   }
