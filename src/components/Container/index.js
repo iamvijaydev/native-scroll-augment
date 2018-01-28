@@ -1,22 +1,8 @@
 import React from 'react'
 
+import asyncLoader from './asyncLoader'
 import Section from './Section'
-
-const fetchComponent = (selectedMenu) => {
-  switch (selectedMenu) {
-    case 0:
-      return import('../Readme')
-
-    case 1:
-      return import('../ConnectedScroll/Eg1')
-
-    case 2:
-      return import('../ConnectedScroll/Eg2')
-
-    default:
-      return new Promise(resolve => resolve());
-  }
-}
+import Loader from './Loader'
 
 export default class Container extends React.Component {
   constructor(props) {
@@ -31,18 +17,16 @@ export default class Container extends React.Component {
   }
 
   componentWillMount() {
-    this.loadComponent(this.props.selectedMenu).then(this.updateState);
+    asyncLoader(this.props.selectedMenu).then(this.updateState);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedMenu !== this.state.selectedMenu) {
-      this.loadComponent(nextProps.selectedMenu).then(this.updateState);
+      this.setState({ isLoading: true });
+      setTimeout(() => {
+        asyncLoader(nextProps.selectedMenu).then(this.updateState);
+      }, 300);
     }
-  }
-
-  loadComponent(selectedMenu) {
-    return fetchComponent(selectedMenu)
-      .then(ResolvedComponent => ResolvedComponent ? ResolvedComponent.default || ResolvedComponent : null)
   }
 
   updateState(Component) {
@@ -58,27 +42,15 @@ export default class Container extends React.Component {
       isLoading
     } = this.state;
 
-    if (isLoading && Component) {
-      return (
-        <Section>
-          <p>Loading...</p>
-          <Component />
-        </Section>
-      )
-    } else if (isLoading && !Component) {
-      return (
-        <Section>
-          <p>Loading...</p>
-        </Section>
-      )
-    } else if (Component) {
-      return (
-        <Section>
-          <Component />
-        </Section>
-      )
-    } else {
-      return <Section />
-    }
+    const loadOrMsg = isLoading ? <p>Loading component...</p> : <p>Failed to load component. Try again?</p>
+    const comp = Component ? <Component /> : loadOrMsg
+    const loading = isLoading ? <Loader /> : null
+
+    return (
+      <Section>
+        {loading}
+        {comp}
+      </Section>
+    )
   }
 }
