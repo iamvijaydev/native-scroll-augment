@@ -13,6 +13,8 @@ const fetchComp = (selectedMenu) => {
       return import('../KineticScroll')
 
     case 'load-exposed-methods-eg-1':
+      return import('../exposedMethods/Eg1')
+
     case 'load-exposed-methods-eg-2':
     default:
       return new Promise(resolve => resolve());
