@@ -8,12 +8,18 @@ var NativeScrollAugment = /** @class */ (function () {
         if (!lodash_1.isElement(props.parent)) {
             throw new Error("First argument should be an element. Provided " + typeof props.parent);
         }
+        if (!props.parent.id) {
+          props.parent.id = `native-scroll-augment-parent-${NativeScrollAugment.generateId()}`
+        }
         if (!lodash_1.isArray(props.scrollsAreas)) {
             throw new Error("Second argument should be an array. Provided " + typeof props.scrollsAreas);
         }
         props.scrollsAreas.forEach(function ($node, index) {
             if (!lodash_1.isElement($node)) {
                 throw new Error("Entries in second argument should be an element.\n            Provided " + typeof $node + " at index " + index);
+            }
+            if (!$node.id) {
+              $node.id = `scroll-area-${NativeScrollAugment.generateId()}`
             }
         });
         this.hasTouch = 'ontouchstart' in window;
@@ -37,6 +43,15 @@ var NativeScrollAugment = /** @class */ (function () {
         this.pressed = false;
         this.isAutoScrolling = false;
         this.settings = lodash_1.extend({}, defaultOptions_1.defaultOptions, props.options);
+    }
+    NativeScrollAugment.generateId = function () {
+      var ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      var ID_LENGTH = 8;
+      var rtn = '';
+      for (var i = 0; i < ID_LENGTH; i++) {
+        rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+      }
+      return rtn;
     }
     NativeScrollAugment.prototype._bindMethods = function () {
         this._tap = this._tap.bind(this);
@@ -134,6 +149,7 @@ var NativeScrollAugment = /** @class */ (function () {
         var target = e.target;
         var valX;
         var valY;
+
         if (this.pressed || this.isAutoScrolling) {
             e.preventDefault();
             e.stopPropagation();
