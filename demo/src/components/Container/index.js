@@ -21,7 +21,7 @@ export default class Container extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedMenu !== this.state.selectedMenu) {
+    if (nextProps.selectedMenu !== this.props.selectedMenu) {
       this.setState({ isLoading: true });
       setTimeout(() => {
         asyncLoader(nextProps.selectedMenu).then(this.updateState);
@@ -41,13 +41,16 @@ export default class Container extends React.Component {
       Component,
       isLoading,
     } = this.state;
+    const {
+      selectedMenu
+    } = this.props
 
     const loadOrMsg = isLoading ? <p>Loading component...</p> : <p>Failed to load component. Try again?</p>
-    const comp = Component ? <Component onVelUpdate={this.onVelUpdate} /> : loadOrMsg
+    const comp = Component ? <Component selectedMenu={selectedMenu} /> : loadOrMsg
     const loading = isLoading ? <Loader /> : null
 
     return (
-      <Section>
+      <Section id="container">
         {loading}
         {comp}
       </Section>
