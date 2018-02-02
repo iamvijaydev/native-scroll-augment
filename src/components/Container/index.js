@@ -39,11 +39,11 @@ export default class Container extends React.Component {
   render() {
     const {
       Component,
-      isLoading
+      isLoading,
     } = this.state;
 
     const loadOrMsg = isLoading ? <p>Loading component...</p> : <p>Failed to load component. Try again?</p>
-    const comp = Component ? <Component /> : loadOrMsg
+    const comp = Component ? <Component onVelUpdate={this.onVelUpdate} /> : loadOrMsg
     const loading = isLoading ? <Loader /> : null
 
     return (

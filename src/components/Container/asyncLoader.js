@@ -9,6 +9,11 @@ const fetchComp = (selectedMenu) => {
     case 'load-connect-scroll-eg-2':
       return import('../ConnectedScroll/Eg2')
 
+    case 'load-kinetic-scroll':
+      return import('../KineticScroll')
+
+    case 'load-exposed-methods-eg-1':
+    case 'load-exposed-methods-eg-2':
     default:
       return new Promise(resolve => resolve());
   }
