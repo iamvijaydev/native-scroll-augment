@@ -68,7 +68,7 @@ export const getMaxScroll = (
   let maxScrollTop = 0;
 
   nodes.forEach((node) => {
-    const $el = node.children[0];
+    const $el = node;
     const maxScrollX = $el.scrollWidth - $el.clientWidth;
     const maxScrollY = $el.scrollHeight - $el.clientHeight;
 

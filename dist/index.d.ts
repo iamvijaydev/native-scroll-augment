@@ -1,5 +1,6 @@
 import { ISettingsOptional } from './defaultOptions';
 export default class NativeScrollAugment {
+    static generateId(): string;
     private hasTouch;
     private DETECT_EVT;
     private activeId;

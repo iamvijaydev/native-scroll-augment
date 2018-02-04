@@ -20,6 +20,17 @@ import {
 } from './defaultOptions';
 
 export default class NativeScrollAugment {
+  static generateId() {
+    const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const ID_LENGTH = 8;
+    let rtn = '';
+
+    for (let i = 0; i < ID_LENGTH; i++) {
+      rtn += ALPHABET.charAt(Math.floor(Math.random() * ALPHABET.length));
+    }
+    return rtn;
+  }
+
   private hasTouch: boolean;
   private DETECT_EVT: string;
   private activeId: string;
@@ -56,13 +67,18 @@ export default class NativeScrollAugment {
     if (!isElement(props.parent)) {
       throw new Error(`First argument should be an element. Provided ${typeof props.parent}`);
     }
+    if (!props.parent.id) {
+      props.parent.id = `native-scroll-augment-parent-${NativeScrollAugment.generateId()}`;
+    }
     if (!isArray(props.scrollsAreas)) {
       throw new Error(`Second argument should be an array. Provided ${typeof props.scrollsAreas}`);
     }
     props.scrollsAreas.forEach(($node, index) => {
       if (!isElement($node)) {
-        throw new Error(`Entries in second argument should be an element.
-            Provided ${typeof $node} at index ${index}`);
+        throw new Error(`Entries in second argument should be an element. Provided ${typeof $node} at index ${index}`);
+      }
+      if (!$node.id) {
+        $node.id = `scroll-area-${NativeScrollAugment.generateId()}`;
       }
     });
 
