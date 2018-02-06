@@ -27,7 +27,7 @@ const Item = styled.div`
   position: relative;
   margin: 0 1rem;
   animation: ${show} .5s ease forwards;
-  flex-basis: ${props => props.isInput ? '7rem' : 'initial'};
+  flex-basis: ${props => props.isInput ? '8rem' : 'initial'};
 `
 
 const Button = styled.button`

@@ -234,7 +234,7 @@ export default class ExposedMethods extends React.Component {
     }
     const getItem = (id, title) => {
       if (!!formItems[id]) {
-        return <Actions.Input type="text" id={id} value={this.state[id]} onChange={this.onChange} />
+        return <Actions.Input type="text" placeholder={`${id.split('-')[3]} value`} id={id} value={this.state[id]} onChange={this.onChange} />
       } else {
         return <Actions.Button onClick={() => this.onActionClick(id)}>{title}</Actions.Button>
       }
