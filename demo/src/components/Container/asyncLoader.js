@@ -14,7 +14,7 @@ const fetchComp = (selectedMenu) => {
 
     case 'load-exposed-methods-eg-1':
     case 'load-exposed-methods-eg-2':
-      return import('../exposedMethods/Eg1')
+      return import('../ExposedMethods')
 
     default:
       return new Promise(resolve => resolve());
