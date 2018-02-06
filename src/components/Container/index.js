@@ -47,7 +47,7 @@ export default class Container extends React.Component {
 
     const loadOrMsg = isLoading ? <p>Loading component...</p> : <p>Failed to load component. Try again?</p>
     const comp = Component ? <Component selectedMenu={selectedMenu} /> : loadOrMsg
-    const loading = isLoading ? <Loader /> : null
+    const loading = isLoading ? <Loader><Loader.Indicator /></Loader> : null
 
     return (
       <Section id="container">
