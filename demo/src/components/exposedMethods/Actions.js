@@ -9,24 +9,25 @@ const Actions = styled.div`
   display: flex;
   justify-content: center;
 `
-
+  
 const show = keyframes`
   0% {
     opacity: 0;
     top: -30px;
   }
-
+  
   100% {
     opacity: 1;
     top: 0;
   }
 `;
-
+  
 const Item = styled.div`
   display: ${props => props.isHidden ? 'none' : 'block'};
   position: relative;
   margin: 0 1rem;
   animation: ${show} .5s ease forwards;
+  flex-basis: ${props => props.isInput ? '8rem' : 'initial'};
 `
 
 const Button = styled.button`
@@ -53,7 +54,29 @@ const Button = styled.button`
   }
 `
 
+const Input = styled.input`
+  padding: 0.5rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 35px;
+  color: #037;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: 1px solid #e0edff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Noto Sans", "Ubuntu", "Droid Sans", "Helvetica Neue", sans-serif;
+  outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:active {
+    outline-color: #ff8e77;
+    box-shadow: 0 0 0 #af3b23;
+    color: #fff7f3;
+  }
+`
+
 Actions.Item = Item
 Actions.Button = Button
+Actions.Input = Input
 
 export default Actions

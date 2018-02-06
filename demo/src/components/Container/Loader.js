@@ -1,5 +1,14 @@
 import styled, { keyframes } from 'styled-components'
 
+const fadeIn = keyframes`
+  from: {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+`
+
 const loading = keyframes`
     0% {left: -200px; width: 30%;}
     50% {width: 30%;}
@@ -10,6 +19,17 @@ const loading = keyframes`
 `
 
 const Loader = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 9;
+  background-color: rgba(255, 255, 255, 0.7);
+  animation: ${fadeIn} .5s ease;
+`
+
+const Indicator = styled.div`
   height: 4px;
   width: 100%;
   position: relative;
@@ -27,5 +47,7 @@ const Loader = styled.div`
     animation: ${loading} 2s linear infinite;
   }
 `
+
+Loader.Indicator = Indicator;
 
 export default Loader
