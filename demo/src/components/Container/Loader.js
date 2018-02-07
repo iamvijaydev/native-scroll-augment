@@ -25,7 +25,7 @@ const Loader = styled.div`
   top: 0;
   bottom: 0;
   z-index: 9;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 0.5);
   animation: ${fadeIn} .5s ease;
 `
 
@@ -34,7 +34,7 @@ const Indicator = styled.div`
   width: 100%;
   position: relative;
   overflow: hidden;
-  background-color: #ddd;
+  background-color: #fff;
 
   &:before {
     display: block;
@@ -43,7 +43,7 @@ const Indicator = styled.div`
     left: -200px;
     width: 200px;
     height: 4px;
-    background-color: #2980b9;
+    background-color: #d84627;
     animation: ${loading} 2s linear infinite;
   }
 `
