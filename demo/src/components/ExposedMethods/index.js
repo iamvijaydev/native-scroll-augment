@@ -14,7 +14,7 @@ const GridExd = Grid.extend`
 export default class ExposedMethods extends React.Component {
   static generateData() {
     const xArray = Array.from({ length: 30 }, (e, i) => i)
-    const yArray = Array.from({ length: 20 }, (e, i) => i)
+    const yArray = Array.from({ length: 30 }, (e, i) => i)
 
     const gridData = [];
     let gridRowData;
@@ -38,7 +38,7 @@ export default class ExposedMethods extends React.Component {
     this.$conatinerParent = document.querySelector('#container');
     this.state = {
       eg1MetaKeys: ['scroll-to-start', 'scroll-to-end', 'scroll-to-start-left', 'scroll-to-end-left', 'scroll-to-start-top', 'scroll-to-end-top'],
-      eg2MetaKeys: ['scroll-to-position-left', 'scroll-to-position-top', 'scroll-to-position', 'scroll-to-value-left', 'scroll-to-value-top', 'scroll-by-value'],
+      eg2MetaKeys: ['scroll-to-position-left', 'scroll-to-position-top', 'scroll-to-position', 'scroll-by-value-left', 'scroll-by-value-top', 'scroll-by-value'],
       selectedDataSet: 'eg1MetaKeys',
       /* eg 1 data */
       'scroll-to-start': {
@@ -84,14 +84,14 @@ export default class ExposedMethods extends React.Component {
         show: ['scroll-to-start-top']
       },
       /* eg 2 data */
-      'scroll-to-position-left': '',
-      'scroll-to-position-top': '',
+      'scroll-to-position-left': 100,
+      'scroll-to-position-top': 100,
       'scroll-to-position': {
         title: 'Scroll to position',
         method: 'scrollToPosition',
       },
-      'scroll-to-value-left': '',
-      'scroll-to-value-top': '',
+      'scroll-by-value-left': 100,
+      'scroll-by-value-top': 100,
       'scroll-by-value': {
         title: 'Scroll by value',
         method: 'scrollByValue',
@@ -120,10 +120,10 @@ export default class ExposedMethods extends React.Component {
     } else if ('load-exposed-methods-eg-2' === selectedMenu) {
       this.setState({
         selectedDataSet: 'eg2MetaKeys',
-        'scroll-to-position-left': '',
-        'scroll-to-position-top': '',
-        'scroll-to-value-left': '',
-        'scroll-to-value-top': '',
+        'scroll-to-position-left': 100,
+        'scroll-to-position-top': 100,
+        'scroll-to-value-left': 100,
+        'scroll-to-value-top': 100,
       })
     }
 
@@ -215,7 +215,7 @@ export default class ExposedMethods extends React.Component {
       value
     } = e.target;
 
-    if (!!id && !!value) {
+    if (!!id) {
       this.setState({
         [id]: value
       })
@@ -226,17 +226,44 @@ export default class ExposedMethods extends React.Component {
     const { selectedMenu } = this.props
     const keys = this.state[this.state.selectedDataSet]
 
+    const disableButton = (id) => {
+      if ('scroll-to-position' === id) {
+        return !this.state['scroll-to-position-left'] || !this.state['scroll-to-position-top']
+      }
+
+      if ('scroll-by-value' === id) {
+        return !this.state['scroll-by-value-left'] || !this.state['scroll-by-value-top']
+      }
+
+      return false
+    }
     const formItems = {
       'scroll-to-position-left': true,
       'scroll-to-position-top': true,
-      'scroll-to-value-left': true,
-      'scroll-to-value-top': true
+      'scroll-by-value-left': true,
+      'scroll-by-value-top': true
+    }
+    const roundEdgeUIFormItems = {
+      'scroll-to-position-left': true,
+      'scroll-by-value-left': true,
+    }
+    const formBtns = {
+      'scroll-to-position': true,
+      'scroll-by-value': true
     }
     const getItem = (id, title) => {
       if (!!formItems[id]) {
-        return <Actions.Input type="text" placeholder={`${id.split('-')[3]} value`} id={id} value={this.state[id]} onChange={this.onChange} />
+        return <Actions.Input
+          type="text"
+          title={`Enter ${id.split('-')[3]} value`}
+          title={`${id.split('-')[3]}`}
+          id={id}
+          value={this.state[id]}
+          onChange={this.onChange}
+          roundEdge={!!roundEdgeUIFormItems[id]}
+        />
       } else {
-        return <Actions.Button onClick={() => this.onActionClick(id)}>{title}</Actions.Button>
+        return <Actions.Button onClick={() => this.onActionClick(id)} disabled={disableButton(id)} isFormBtn={!!formBtns[id]}>{title}</Actions.Button>
       }
     }
 
