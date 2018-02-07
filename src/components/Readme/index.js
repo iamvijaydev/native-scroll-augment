@@ -3,6 +3,7 @@ import marked from 'marked'
 
 import readme from '../../../../README.md'
 import Parent from '../shared/Parent'
+import Article from './Article'
 
 export default class ReadMe extends React.Component {
 
@@ -11,6 +12,10 @@ export default class ReadMe extends React.Component {
   }
 
   render() {
-    return <Parent ref={(node) => { this.$parent = node }} dangerouslySetInnerHTML={this.createMarkup()} />
+    return (
+      <Parent>
+        <Article ref={(node) => { this.$parent = node }} dangerouslySetInnerHTML={this.createMarkup()} />
+      </Parent>
+    )
   }
 }
