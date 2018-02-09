@@ -11,6 +11,8 @@ const Parent = styled.div`
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 .5rem 2rem rgba(0, 0, 0, 0.34);
+  cursor: all-scroll;
+  cursor: -webkit-grab;
 `
 
 export default Parent
