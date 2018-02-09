@@ -106,6 +106,9 @@ export default class NativeScrollAugment {
     this.pressed = false;
     this.isAutoScrolling = false;
 
+    this.autoScrollTracker = -1;
+    this.resetMomentumTracker = -1;
+
     this.settings = extend(
       {},
       defaultOptions,
