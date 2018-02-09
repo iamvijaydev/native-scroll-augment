@@ -9,6 +9,8 @@ const Grid = styled.div`
   position: absolute;
   right: 0;
   bottom: 0;
+  cursor: all-scroll;
+  cursor: -webkit-grab;
 `
 
 const Row = styled.div`

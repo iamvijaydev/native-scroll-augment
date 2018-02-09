@@ -16,6 +16,8 @@ const Header = styled.div`
   background-color: #fff;
   z-index: 3;
   box-shadow: 0 2px 3px #d2d2d2;
+  cursor: all-scroll;
+  cursor: -webkit-grab;
 `
 
 const Row = styled.div`

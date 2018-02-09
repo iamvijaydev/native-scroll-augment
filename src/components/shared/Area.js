@@ -4,6 +4,8 @@ const Area = styled.div`
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
+  cursor: all-scroll;
+  cursor: -webkit-grab;
 `
 
 const Content = styled.ul`

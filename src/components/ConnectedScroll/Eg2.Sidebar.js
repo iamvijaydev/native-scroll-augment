@@ -11,6 +11,8 @@ const Sidebar = styled.div`
   z-index: 4;
   background-color: #fff;
   box-shadow: 2px 0 3px #d2d2d2;
+  cursor: all-scroll;
+  cursor: -webkit-grab;
 `
 
 const List = styled.ul`
