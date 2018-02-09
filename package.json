@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "parcel build entry.js"
+    "build": "webpack -p"
   },
   "dependencies": {
     "marked": "^0.3.12",
