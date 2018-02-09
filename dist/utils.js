@@ -40,7 +40,7 @@ exports.getMaxScroll = function (nodes) {
     var maxScrollLeft = 0;
     var maxScrollTop = 0;
     nodes.forEach(function (node) {
-        var $el = node.children[0];
+        var $el = node;
         var maxScrollX = $el.scrollWidth - $el.clientWidth;
         var maxScrollY = $el.scrollHeight - $el.clientHeight;
         if (maxScrollX > maxScrollLeft) {
