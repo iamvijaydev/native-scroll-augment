@@ -4,7 +4,7 @@ import {
   isString,
   extend,
   find,
-  isNumber
+  isNumber,
 } from 'lodash';
 import {
   findMatchingTarget,
@@ -20,7 +20,7 @@ import {
 } from './defaultOptions';
 
 export default class NativeScrollAugment {
-  static generateId() {
+  public static generateId() {
     const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const ID_LENGTH = 8;
     let rtn = '';
@@ -33,29 +33,29 @@ export default class NativeScrollAugment {
 
   private hasTouch: boolean;
   private DETECT_EVT: string;
-  private activeId: string;
+  private activeId: string = '';
   private $parent: HTMLElement;
   private scrollsAreas: HTMLElement[];
 
-  private scrollLeft: number;
-  private scrollTop: number;
-  private lastScrollLeft: number;
-  private lastScrollTop: number;
-  private targetTop: number;
-  private targetLeft: number;
+  private scrollLeft: number = 0;
+  private scrollTop: number = 0;
+  private lastScrollLeft: number = 0;
+  private lastScrollTop: number = 0;
+  private targetTop: number = 0;
+  private targetLeft: number = 0;
 
-  private velocityLeft: number;
-  private velocityTop: number;
-  private amplitudeLeft: number;
-  private amplitudeTop: number;
+  private velocityLeft: number = 0;
+  private velocityTop: number = 0;
+  private amplitudeLeft: number = 0;
+  private amplitudeTop: number = 0;
 
-  private timeStamp: number;
-  private referenceX: number;
-  private referenceY: number;
-  private pressed: boolean;
-  private autoScrollTracker: number;
-  private isAutoScrolling: boolean;
-  private resetMomentumTracker: number;
+  private timeStamp: number = 0;
+  private referenceX: number = 0;
+  private referenceY: number = 0;
+  private pressed: boolean = false;
+  private autoScrollTracker: number = -1;
+  private isAutoScrolling: boolean = false;
+  private resetMomentumTracker: number = -1;
 
   private settings: ISettings;
 
@@ -84,30 +84,8 @@ export default class NativeScrollAugment {
 
     this.hasTouch = 'ontouchstart' in window;
     this.DETECT_EVT = this.hasTouch ? 'touchstart' : 'mouseover';
-    this.activeId = '';
     this.$parent = props.parent;
     this.scrollsAreas = props.scrollsAreas;
-
-    this.scrollLeft = 0;
-    this.scrollTop = 0;
-    this.lastScrollLeft = 0;
-    this.lastScrollTop = 0;
-    this.targetTop = 0;
-    this.targetLeft = 0;
-
-    this.velocityLeft = 0;
-    this.velocityTop = 0;
-    this.amplitudeLeft = 0;
-    this.amplitudeTop = 0;
-
-    this.timeStamp = 0;
-    this.referenceX = 0;
-    this.referenceY = 0;
-    this.pressed = false;
-    this.isAutoScrolling = false;
-
-    this.autoScrollTracker = -1;
-    this.resetMomentumTracker = -1;
 
     this.settings = extend(
       {},
@@ -117,16 +95,16 @@ export default class NativeScrollAugment {
   }
 
   public _bindMethods() {
-    this._tap = this._tap.bind(this)
-    this._swipe = this._swipe.bind(this)
-    this._release = this._release.bind(this)
-    this._onScroll = this._onScroll.bind(this)
-    this._setActiveNode = this._setActiveNode.bind(this)
-    this._autoScroll = this._autoScroll.bind(this)
+    this._tap = this._tap.bind(this);
+    this._swipe = this._swipe.bind(this);
+    this._release = this._release.bind(this);
+    this._onScroll = this._onScroll.bind(this);
+    this._setActiveNode = this._setActiveNode.bind(this);
+    this._autoScroll = this._autoScroll.bind(this);
   }
 
   public init() {
-    this._bindMethods()
+    this._bindMethods();
 
     this.$parent.addEventListener(this.DETECT_EVT, this._setActiveNode, true);
     this.$parent.addEventListener('scroll', this._onScroll, true);
@@ -155,10 +133,6 @@ export default class NativeScrollAugment {
 
   public replaceScrollAreas(scrollsAreas: HTMLElement[], left?: number, top?: number) {
     let ok = true;
-    let notElement: {
-      $node: HTMLElement;
-      index: number;
-    } | undefined;
 
     if (!isArray(scrollsAreas)) {
       console.error(`Argument should be an array. Provided ${typeof scrollsAreas}`);
@@ -196,26 +170,37 @@ export default class NativeScrollAugment {
     }
   }
 
-  public _leftVelocityTracker() {
+  public _velocityTracker(options: { [key: string]: string; }) {
+    const {
+      scroll,
+      lastScroll,
+      velocity,
+    } = options;
+
     const now = getTime();
     const elapsed = now - this.timeStamp;
-    const delta = this.scrollLeft - this.lastScrollLeft;
+    const delta = this[scroll] - this[lastScroll];
 
     this.timeStamp = now;
-    this.lastScrollLeft = this.scrollLeft;
+    this[lastScroll] = this[scroll];
 
-    this.velocityLeft = this.settings.movingAverage * (1000 * delta / (1 + elapsed)) + 0.2 * this.velocityLeft;
+    this[velocity] = this.settings.movingAverage * (1000 * delta / (1 + elapsed)) + 0.2 * this[velocity];
+  }
+
+  public _leftVelocityTracker() {
+    this._velocityTracker({
+      lastScroll: 'lastScrollLeft',
+      scroll: 'scrollLeft',
+      velocity: 'velocityLeft',
+    });
   }
 
   public _topVelocityTracker() {
-    const now = getTime();
-    const elapsed = now - this.timeStamp;
-    const delta = this.scrollTop - this.lastScrollTop;
-
-    this.timeStamp = now;
-    this.lastScrollTop = this.scrollTop;
-
-    this.velocityTop = this.settings.movingAverage * (1000 * delta / (1 + elapsed)) + 0.2 * this.velocityTop;
+    this._velocityTracker({
+      lastScroll: 'lastScrollTop',
+      scroll: 'scrollTop',
+      velocity: 'velocityTop',
+    });
   }
 
   public _scrollTo(left: number, top: number) {
@@ -366,18 +351,13 @@ export default class NativeScrollAugment {
   }
 
   public _swipe(e: MouseEvent | TouchEvent) {
-    const point = getPoint(e, this.hasTouch);
-    let x;
-    let y;
-    let deltaX;
-    let deltaY;
-
     if (this.pressed) {
-      x = point.x;
-      y = point.y;
+      const point = getPoint(e, this.hasTouch);
+      const x = point.x;
+      const y = point.y;
 
-      deltaX = this.referenceX - x;
-      deltaY = this.referenceY - y;
+      let deltaX = this.referenceX - x;
+      let deltaY = this.referenceY - y;
 
       if (deltaX > 2 || deltaX < -2) {
         this.referenceX = x;
@@ -397,13 +377,8 @@ export default class NativeScrollAugment {
 
       if (this.resetMomentumTracker !== -1) {
         clearTimeout(this.resetMomentumTracker);
-        this.resetMomentumTracker = -1;
       }
-      this.resetMomentumTracker = setTimeout(() => {
-        if (this.pressed) {
-          this._resetMomentum();
-        }
-      }, 100);
+      this.resetMomentumTracker = setTimeout(() => (this.pressed && this._resetMomentum()), 100);
     }
   }
 
@@ -438,58 +413,45 @@ export default class NativeScrollAugment {
   }
 
   public _scrollToEdges(start: boolean, left: boolean, top: boolean) {
-    let targetLeft = 0;
-    let targetTop = 0;
-    let amplitudeLeft = 0;
-    let amplitudeTop = 0;
-    let maxScroll;
+    const maxScroll = start ? { left: 0, top: 0 } : getMaxScroll(this.scrollsAreas);
+    const amplitudeLeftValue = start ? -this.scrollLeft : maxScroll.left - this.scrollLeft;
+    const amplitudeTopValue = start ? -this.scrollTop : maxScroll.top - this.scrollTop;
 
-    if (start) {
-      targetLeft = left ? 0 : this.scrollLeft;
-      targetTop = top ? 0 : this.scrollTop;
-      amplitudeLeft = left ? -this.scrollLeft : 0;
-      amplitudeTop = top ? -this.scrollTop : 0;
-    } else {
-      maxScroll = getMaxScroll(this.scrollsAreas);
-
-      targetLeft = left ? maxScroll.left : this.scrollLeft;
-      targetTop = top ? maxScroll.top : this.scrollTop;
-      amplitudeLeft = left ? maxScroll.left - this.scrollLeft : 0;
-      amplitudeTop = top ? maxScroll.top - this.scrollTop : 0;
-    }
+    const targetLeft = left ? (start ? 0 : maxScroll.left) : this.scrollLeft;
+    const targetTop = top ? (start ? 0 : maxScroll.top) : this.scrollTop;
+    const amplitudeLeft = left ? amplitudeLeftValue : 0;
+    const amplitudeTop = top ? amplitudeTopValue : 0;
 
     this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
   }
 
+  public _getCorrVal(addTo: boolean, left: any, top: any) {
+    const numLeft = parseInt(left, 10);
+    const numTop = parseInt(top, 10);
+    const corrLeft = isNaN(numLeft) ? this.scrollLeft : (addTo ? numLeft + this.scrollLeft : numLeft);
+    const corrTop = isNaN(numTop) ? this.scrollTop : (addTo ? numTop + this.scrollTop : numTop);
+
+    return {
+      corrLeft,
+      corrTop,
+    };
+  }
+
   public _scrollToValue(addTo: boolean, left: any, top: any) {
-    let maxScroll;
-    let numLeft;
-    let corrLeft;
-    let numTop;
-    let corrTop;
-    let targetLeft;
-    let targetTop;
-    let moveLeft;
-    let moveTop;
-    let amplitudeLeft;
-    let amplitudeTop;
-
-    maxScroll = getMaxScroll(this.scrollsAreas);
-
-    numLeft = parseInt(left, 10);
-    numTop = parseInt(top, 10);
-
-    corrLeft = isNaN(numLeft) ? this.scrollLeft : (addTo ? numLeft + this.scrollLeft : numLeft);
-    corrTop = isNaN(numTop) ? this.scrollTop : (addTo ? numTop + this.scrollTop : numTop);
-
-    targetLeft = corrLeft > maxScroll.left ? maxScroll.left : (corrLeft < 0 ? 0 : corrLeft);
-    targetTop = corrTop > maxScroll.top ? maxScroll.top : (corrTop < 0 ? 0 : corrTop);
-
-    moveLeft = this.scrollLeft - targetLeft !== 0 ? true : false;
-    moveTop = this.scrollTop - targetTop !== 0 ? true : false;
-
-    amplitudeLeft = moveLeft ? targetLeft - this.scrollLeft : 0;
-    amplitudeTop = moveTop ? targetTop - this.scrollTop : 0;
+    const {
+      corrLeft,
+      corrTop,
+    } = this._getCorrVal(addTo, left, top);
+    const {
+      left: maxScrollLeft,
+      top: maxScrollTop,
+    } = getMaxScroll(this.scrollsAreas);
+    const targetLeft = corrLeft > maxScrollLeft ? maxScrollLeft : (corrLeft < 0 ? 0 : corrLeft);
+    const targetTop = corrTop > maxScrollTop ? maxScrollTop : (corrTop < 0 ? 0 : corrTop);
+    const moveLeft = this.scrollLeft - targetLeft !== 0 ? true : false;
+    const moveTop = this.scrollTop - targetTop !== 0 ? true : false;
+    const amplitudeLeft = moveLeft ? targetLeft - this.scrollLeft : 0;
+    const amplitudeTop = moveTop ? targetTop - this.scrollTop : 0;
 
     this._triggerAutoScroll(targetLeft, targetTop, amplitudeLeft, amplitudeTop);
   }
