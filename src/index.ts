@@ -176,7 +176,6 @@ export default class NativeScrollAugment {
       lastScroll,
       velocity,
     } = options;
-
     const now = getTime();
     const elapsed = now - this.timeStamp;
     const delta = this[scroll] - this[lastScroll];
@@ -324,7 +323,6 @@ export default class NativeScrollAugment {
   public _resetMomentum() {
     this.velocityTop = this.amplitudeTop = 0;
     this.velocityLeft = this.amplitudeLeft = 0;
-
     this.lastScrollTop = this.scrollTop;
     this.lastScrollLeft = this.scrollLeft;
   }
@@ -355,7 +353,6 @@ export default class NativeScrollAugment {
       const point = getPoint(e, this.hasTouch);
       const x = point.x;
       const y = point.y;
-
       let deltaX = this.referenceX - x;
       let deltaY = this.referenceY - y;
 
@@ -416,7 +413,6 @@ export default class NativeScrollAugment {
     const maxScroll = start ? { left: 0, top: 0 } : getMaxScroll(this.scrollsAreas);
     const amplitudeLeftValue = start ? -this.scrollLeft : maxScroll.left - this.scrollLeft;
     const amplitudeTopValue = start ? -this.scrollTop : maxScroll.top - this.scrollTop;
-
     const targetLeft = left ? (start ? 0 : maxScroll.left) : this.scrollLeft;
     const targetTop = top ? (start ? 0 : maxScroll.top) : this.scrollTop;
     const amplitudeLeft = left ? amplitudeLeftValue : 0;

@@ -20,6 +20,12 @@
             "config": {
                 "threshold": 35
             }
+        },
+        "method-complexity": {
+            "enable": true,
+            "config": {
+                "threshold": 13
+            }
         }
     },
     "exclude_patterns": [
