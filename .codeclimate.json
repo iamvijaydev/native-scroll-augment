@@ -22,5 +22,8 @@
             }
         }
     },
-    "exclude_patterns": ["dist/"]
+    "exclude_patterns": [
+        "dist/",
+        "demo/"
+    ]
 }
